@@ -35,7 +35,7 @@ colors = [0xFFEEEE, 0xFFF2EE, 0xFFF7EE, 0xFFFBEE, 0xFFFFEE, 0xFBFFEE, 0xF7FFEE, 
 
 bot = discord.Client()
 
-token_text = open("C:\\Users\\qsc14\\Desktop\\discord\\mw_token.txt", 'r')
+token_text = open("C:\\Users\\qsc14\\Desktop\\discord\\token\\mw_token.txt", 'r')
 token = token_text.readline() #토큰을 로컬 텍스트에서 가져옴
 
 bot = commands.Bot(command_prefix='!') # 전처리 기호
