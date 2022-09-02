@@ -216,13 +216,6 @@ async def 메(ctx):
 # 역할 신 944955777968398407
 # 역할 테스트서버 957815491299278849
 # 역할 머웅투르 공방 960456596037705838
-@bot.command()
-@commands.has_role(957815491299278849)
-async def qwerpoiu(ctx, n):
-    f = open('C:\\Users\\qsc14\\Desktop\\discord\\test.txt', 'r')
-    line = f.readlines()
-    await ctx.send(line[int(n) - 1])  # 텍스트 라인 읽기
-    f.close()
 
 
 @bot.command()
