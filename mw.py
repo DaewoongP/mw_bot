@@ -1063,7 +1063,7 @@ async def 자투리(ctx):  # 자투리 링크버튼
 # ----------------------------------------------------------------------------------------- 프로필
 @bot.command()
 async def 프로필(ctx, char_name):
-    await ctx.send('현재 로아와에서 봇을 막아버려서 기능이 안됩니다 ㅜㅜ')
+    await ctx.send('현재 로아와에서 봇을 막아버려서 기능이 안됩니다 ㅜㅜ') # 삭제
     '''
     user = ctx.message.author.nick
     id = ctx.message.author.id  # id 가져오기
