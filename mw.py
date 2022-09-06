@@ -467,7 +467,7 @@ async def 강화(ctx):
         embed = discord.Embed(title='```강화 성공 !!```', color=rf_effect)
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
-        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         embed.add_field(name='이전 강화 수치', value=f'<@{id}> : {rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
         embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
@@ -480,7 +480,7 @@ async def 강화(ctx):
             embed = discord.Embed(title='```강화 성공 !!```', color=rf_effect)
             embed.set_thumbnail(
                 url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
-            embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+            embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
             embed.add_field(name='이전 강화 수치', value=f'<@{id}> : {rf}강', inline=True)
             embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
             embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
@@ -499,7 +499,7 @@ async def 강화(ctx):
         embed = discord.Embed(title='```강화 실패 ㅠㅠ```', color=rf_effect)
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
-        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         embed.add_field(name='현재 강화 수치', value=f'{rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
         embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
@@ -570,7 +570,7 @@ async def 강화확인(ctx):
     embed = discord.Embed(title='```현재 강화 확인```', color = rf_effect)
     embed.set_thumbnail(
         url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
-    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
     embed.add_field(name='현재 강화 수치', value=f'{rf}강', inline=True)
     embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
     embed.add_field(name='장인의 기운', value=f'{jangi:.2f}%', inline=False)
@@ -621,7 +621,7 @@ async def 이벤트(ctx):  # 이벤트 리스트에 멤버 입력
         embed = discord.Embed(title='🎉 ```딩식당 이벤트```', color=random.choice(colors))
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/960483064197296168/unknown_2.png')
-        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         embed.add_field(name='이벤트 등록완료!', value=f'<@{id}>', inline=False)
         await ctx.send(embed=embed)
         event.append(user)
@@ -886,13 +886,13 @@ async def 코인(ctx):
         embed = discord.Embed(title='🤭 앞면!', color=0xffffff)  # result의 팀을 각각 embed로 출력
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/963299860923183144/doge.png')
-        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         await ctx.send(embed=embed)
     else:
         embed = discord.Embed(title='🤔 뒷면!', color=0x000000)  # result의 팀을 각각 embed로 출력
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/963302395062931486/doge_black.png')
-        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         await ctx.send(embed=embed)
 
 
@@ -1143,7 +1143,6 @@ async def 프로필(ctx, char_name):
     '''
 
 # -------------------------------------------------------------------------------------- 운세
-
 @bot.command()
 async def 운세(ctx,date):
     user = ctx.message.author.nick
@@ -1159,27 +1158,22 @@ async def 운세(ctx,date):
     options.add_experimental_option('excludeSwitches',['enable-logging'])
     url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%EC%98%A4%EB%8A%98%EC%9D%98%EC%9A%B4%EC%84%B8'
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    driver.implicitly_wait(1)
     driver.get(url)
-    birth = driver.find_element_by_xpath('//*[@id="srch_txt"]') # x-path값 대입
+    birth = driver.find_element("xpath",'//*[@id="srch_txt"]') # x-path값 대입 (셀레늄 3버전, 4버전 코드다름)
     birth.click()
     birth.clear() # 텍스트창 클릭후 적혀있는 글 제거 후 입력 (크롬 버전에 따라 달랐던거로..)
     birth.send_keys(date)
-    btn = driver.find_element_by_xpath('//*[@id="fortune_birthCondition"]/div[1]/fieldset/input')
+    btn = driver.find_element("xpath",'//*[@id="fortune_birthCondition"]/div[1]/fieldset/input')
     btn.click()
+    driver.implicitly_wait(2) # 버튼 입력 후 element가 나오는 시간 기다리기
+    fortune_main = driver.find_element("xpath",'//*[@id="fortune_birthResult"]/dl[1]/dd/strong')
+    fortune_sub = driver.find_element("xpath",'//*[@id="fortune_birthResult"]/dl[1]/dd/p')
 
-    #while(True): # 크롬창 확인
-    #	pass
-
-    fortune_main = driver.find_element_by_xpath('//*[@id="fortune_birthResult"]/dl[1]/dd/strong')
-    #await ctx.send(fortune_main.text)
-    fortune_sub = driver.find_element_by_xpath('//*[@id="fortune_birthResult"]/dl[1]/dd/p')
-    #await ctx.send(fortune_sub.text)
     fortune_sub_list = fortune_sub.text.split('.')
     ft_sub = '\n'.join(fortune_sub_list)
     embed = discord.Embed(title='🍀 오늘의 운세', color=random.choice(colors))  # 임베드 타이틀 - 섬네일 - 필드 - 푸터 순서 잘지키기
     embed.add_field(name=f'✒️ {fortune_main.text}', value=f'`{ft_sub}`', inline=False)
-    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar_url)
+    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
     await ctx.send(embed=embed)
 
 # -------------------------------------------------------------------------------------- 에러처리
