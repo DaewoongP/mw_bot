@@ -1,4 +1,5 @@
-import asyncio, discord
+import asyncio
+import discord
 import random
 import numpy as np
 # from discord.ui import Button, View
@@ -33,12 +34,16 @@ colors = [0xFFEEEE, 0xFFF2EE, 0xFFF7EE, 0xFFFBEE, 0xFFFFEE, 0xFBFFEE, 0xF7FFEE, 
           0xFFFFC4, 0xF0FFC4, 0xE1FFC4, 0xD2FFC4, 0xC4FFC4, 0xC4FFD2, 0xC4FFE1, 0xC4FFF0, 0xC4FFFF, 0xC4F0FF,
           0xC4E1FF, 0xC4D2FF, 0xC4C4FF, 0xD2C4FF, 0xE1C4FF, 0xF0C4FF, 0xFFC4FF, 0xFFC4F0, 0xFFC4E1]
 
-bot = discord.Client()
+#bot = discord.Client()
 
 token_text = open("C:\\Users\\qsc14\\Desktop\\discord\\token\\mw_token.txt", 'r')
 token = token_text.readline() #토큰을 로컬 텍스트에서 가져옴
 
-bot = commands.Bot(command_prefix='!') # 전처리 기호
+# discord bot developer portal 에서 message content intent (ON) 설정 이후 True 까지 해줘야 command가 돌아감
+intents = discord.Intents.default()
+intents.message_content = True 
+
+bot = commands.Bot(command_prefix='!', intents=intents, help_command=None) # 전처리 기호
 buttons = ButtonsClient(bot)
 
 
