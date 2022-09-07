@@ -11,9 +11,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-# opencv
-import cv2
-
 event = []
 event_id = []
 event_shuffle = []
@@ -1065,20 +1062,22 @@ async def 자투리(ctx):  # 자투리 링크버튼
 @bot.command()
 async def 프로필(ctx, char_name):
     await ctx.send('현재 로아와에서 봇을 막아버려서 기능이 안됩니다 ㅜㅜ') # 삭제
-    '''
     user = ctx.message.author.nick
     id = ctx.message.author.id  # id 가져오기
     if user == None:
         user = ctx.message.author.name
 
-    char_chk = "캐릭터 정보가 없습니다"
-
     # 옵션 생성
     options = webdriver.ChromeOptions()
     # 창 숨기는 옵션 추가
-    options.add_argument("headless")
-    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
-    url = 'https://loawa.com/char/'
+    #options.add_argument("headless")
+    #options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+    url = 'https://lostark.game.onstove.com/Profile/Character/' + char_name
+
+    await ctx.send(url)
+
+    '''
+    
     name = str(char_name)
     url = url + name
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
