@@ -3,5 +3,4 @@
 # 토큰 파일 무시
 token/
 # 실험용 봇 무시
-mw_game.py
 test.py
