@@ -229,6 +229,7 @@ async def 패치노트(ctx):
     embed.add_field(name='📕 1. `!프로필` 기능 불가', value='`로아와 십새끼`', inline=False)
     embed.add_field(name='📘 2. `버그 개선`', value='`진짜 개선함`', inline=False)
     embed.add_field(name='📙 3. `이모티콘 개선`', value='괄호 삭제 및 `로아콘` 명칭 삭제', inline=False)
+    embed.add_field(name='📗 4. `예정사항`', value = '`로아 장비 검색기능 40% 완료`', inline=False)
     await ctx.send(embed=embed)
 
 @bot.command()
