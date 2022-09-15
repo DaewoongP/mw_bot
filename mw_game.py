@@ -11,6 +11,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import ActionChains
 
 # opencv
 import cv2
@@ -61,13 +62,13 @@ async def test(ctx):
     if user == None:
         user = ctx.message.author.name
 
-    char_name = "챠화비"
+    char_name = "바닥밑에바닥이"
 
     # 옵션 생성
     options = webdriver.ChromeOptions()
     # 창 숨기는 옵션 추가
-    #options.add_argument("headless")
-    #options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+    options.add_argument("headless")
+    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
     url = 'https://lostark.game.onstove.com/Profile/Character/' + char_name
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
@@ -117,26 +118,41 @@ async def test(ctx):
     await ctx.send("문장"+char_equip_emblem.text)
     '''
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[1]')
-    driver.move_To_Element(target).perform()#
+    ActionChains(driver).move_to_element(target).perform() #ActionChains를 통해 movetoelement 구현
+    # 마우스 등 특수한 동작 시행시에 액션체인 사용해보는거 나쁘지않을듯
     char_equip_head = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("머리" + char_equip_head.text)
-    
 
-    '''
-    char_equip_shoulder = driver.find_element("xpath",'')
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[2]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_shoulder = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("어깨" + char_equip_shoulder.text)
-    char_equip_chestpiece = driver.find_element("xpath",'')
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[3]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_chestpiece = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("상의" + char_equip_chestpiece.text)
-    char_equip_pants = driver.find_element("xpath",'')
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[4]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_pants = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("하의" + char_equip_pants.text)
-    char_equip_gloves = driver.find_element("xpath",'')
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[5]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_gloves = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("장갑" + char_equip_gloves.text)
-    char_equip_weapon = driver.find_element("xpath",'')
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[6]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("무기" + char_equip_weapon.text)
-    char_class = driver.find_element("xpath",'')
-    await ctx.send("직업" + char_class.text)
-    '''
-    
+
+    char_class = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[3]/font')
+    class_text_len = len(char_class.text) - 3
+    await ctx.send("직업" + char_class.text[:class_text_len])
+
+    # 악세 팔찌 돌이름 각인서 전압개수 카드 보석 스킬렙 트포 룬 내실개수 원정대 selectmenu 
     driver.quit()
     
 
