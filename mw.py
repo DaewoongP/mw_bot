@@ -195,24 +195,6 @@ async def on_message(message):
     
     await bot.process_commands(message)
 
-# ---------------------------- 메
-@bot.command()
-async def 메(ctx):
-    await buttons.send(
-        content="**-메-**",
-        channel=ctx.channel.id,
-        components=[
-            ActionRow([
-                Button(
-                    label='GM 머의 패치노트',
-                    style=ButtonType().Link,  # Primary , Success, Secondary, Danger, Link
-                    url='https://languid-worm-c54.notion.site/1d0b72f5c57a44caa5344b96dad7e68b'
-                )
-            ])
-        ]
-    )
-
-
 
 # -------------------------------------------------------------------------------------- 기본
 
@@ -226,7 +208,7 @@ async def 이모티콘(ctx):
 async def 패치노트(ctx):
     embed = discord.Embed(title='📖 머웅 봇 v2.2 패치노트', color=random.choice(colors))
     # 📕📘📙📗
-    embed.add_field(name='📕 1. `!프로필` 기능 불가', value='`로아와 십새끼`', inline=False)
+    embed.add_field(name='📕 1. `!프로필` 기능 작업 약 70% 완료', value='`로아와 십새끼`', inline=False)
     embed.add_field(name='📘 2. `버그 개선`', value='`진짜 개선함`', inline=False)
     embed.add_field(name='📙 3. `이모티콘 개선`', value='괄호 삭제 및 `로아콘` 명칭 삭제', inline=False)
     embed.add_field(name='📗 4. `예정사항`', value = '`로아 장비 검색기능 40% 완료`', inline=False)
