@@ -62,7 +62,7 @@ async def test(ctx):
     if user == None:
         user = ctx.message.author.name
 
-    char_name = "바닥밑에바닥이"
+    char_name = "챠화비"
 
     # 옵션 생성
     options = webdriver.ChromeOptions()
@@ -117,43 +117,168 @@ async def test(ctx):
     char_equip_emblem = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[4]/div/ul/li[3]/div')
     await ctx.send("문장"+char_equip_emblem.text)
     '''
+
+    char_set = []
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[1]')
     ActionChains(driver).move_to_element(target).perform() #ActionChains를 통해 movetoelement 구현
     # 마우스 등 특수한 동작 시행시에 액션체인 사용해보는거 나쁘지않을듯
     char_equip_head = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("머리" + char_equip_head.text)
+    char_equip_head_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("머리" + char_equip_head.text + " " + char_equip_head_qual.text)
+    char_set_2 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[2]')
+    char_set.append(char_set_2.text) # 머리
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[2]')
     ActionChains(driver).move_to_element(target).perform()
     char_equip_shoulder = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("어깨" + char_equip_shoulder.text)
+    char_equip_shoulder_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("어깨" + char_equip_shoulder.text + " " + char_equip_shoulder_qual.text)
+    char_set_3 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[6]')
+    char_set.append(char_set_3.text) # 어깨
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[3]')
     ActionChains(driver).move_to_element(target).perform()
     char_equip_chestpiece = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("상의" + char_equip_chestpiece.text)
+    char_equip_chestpiece_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("상의" + char_equip_chestpiece.text + " " + char_equip_chestpiece_qual.text)
+    char_set_4 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[3]')
+    char_set.append(char_set_4.text) # 상의
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[4]')
     ActionChains(driver).move_to_element(target).perform()
     char_equip_pants = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("하의" + char_equip_pants.text)
+    char_equip_pants_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("하의" + char_equip_pants.text + " " + char_equip_pants_qual.text)
+    char_set_5 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[4]')
+    char_set.append(char_set_5.text) # 하의
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[5]')
     ActionChains(driver).move_to_element(target).perform()
     char_equip_gloves = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("장갑" + char_equip_gloves.text)
+    char_equip_gloves_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("장갑" + char_equip_gloves.text + " " + char_equip_gloves_qual.text)
+    char_set_6 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[5]')
+    char_set.append(char_set_6.text) # 장갑
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[6]')
     ActionChains(driver).move_to_element(target).perform()
     char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("무기" + char_equip_weapon.text)
-
+    char_equip_weapon_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    await ctx.send("무기" + char_equip_weapon.text + " " + char_equip_weapon_qual.text)
+    char_set_1 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[1]')
+    char_set.append(char_set_1.text) # 무기 세트효과까지 뽑아냄
+    
+    # 직업
     char_class = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[3]/font')
     class_text_len = len(char_class.text) - 3
     await ctx.send("직업" + char_class.text[:class_text_len])
 
-    # 악세 팔찌 돌이름 각인서 전압개수 카드 보석 스킬렙 트포 룬 내실개수 원정대 selectmenu 
+    # char_set list에 세트효과가 각각 들어가있음
+    await ctx.send("세트 효과" + char_set[0])
+    await ctx.send("세트 효과" + char_set[1])
+    await ctx.send("세트 효과" + char_set[2])
+    await ctx.send("세트 효과" + char_set[3])
+    await ctx.send("세트 효과" + char_set[4])
+    await ctx.send("세트 효과" + char_set[5])
+    # 세트효과 초기화
+    set_ji = 0
+    set_be = 0
+    set_gal = 0
+    set_pa = 0
+    set_me = 0
+    set_sa = 0
+    set_ak = 0
+    set_han = 0
+    set_gu = 0
+    char_set_t_1 = ""
+    char_set_t_2 = ""
+    char_set_t_3 = ""
+    char_set_t_4 = ""
+    char_set_t_5 = ""
+    char_set_t_6 = ""
+    char_set_t_7 = ""
+    char_set_t_8 = ""
+    char_set_t_9 = ""
+
+    for i in char_set:
+        if "지배" in i:
+            set_ji += 1
+            char_set_t_1 = str(set_ji) + "지배"
+        elif "배신" in i:
+            set_be += 1
+            char_set_t_2 = str(set_be) + "배신"
+        elif "갈망" in i:
+            set_gal += 1
+            char_set_t_3 = str(set_gal) + "갈망"
+        elif "파괴" in i:
+            set_pa += 1
+            char_set_t_4 = str(set_pa) + "파괴"
+        elif "매혹" in i:
+            set_me += 1
+            char_set_t_5 = str(set_me) + "매혹"
+        elif "사멸" in i:
+            set_sa += 1
+            char_set_t_6 = str(set_sa) + "사멸"
+        elif "악몽" in i:
+            set_ak += 1
+            char_set_t_7 = str(set_ak) + "악몽"
+        elif "환각" in i:
+            set_han += 1
+            char_set_t_8 = str(set_han) + "환각"
+        elif "구원" in i:
+            set_gu += 1
+            char_set_t_9 = str(set_gu) + "구원"
+        else:
+            pass
+    # x지배 x악몽 출력
+    await ctx.send(char_set_t_1 + char_set_t_2 + char_set_t_3 
+                 + char_set_t_4 + char_set_t_5 + char_set_t_6 
+                 + char_set_t_7 + char_set_t_8 + char_set_t_9)
+
+
+    # 악세 팔찌 돌이름 각인서 전압개수 카드 보석 스킬렙 트포 룬 내실개수 원정대 selectmenu 로딩메세지
+    '''
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[7]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_acc_neck = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("목걸이" + char_acc_neck.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[8]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("귀걸이1" + char_equip_weapon.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[9]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("귀걸이2" + char_equip_weapon.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[10]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("반지1" + char_equip_weapon.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[11]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("반지2" + char_equip_weapon.text)
+    '''
+
+
     driver.quit()
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 
