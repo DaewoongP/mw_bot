@@ -62,7 +62,7 @@ async def test(ctx):
     if user == None:
         user = ctx.message.author.name
 
-    char_name = "챠화비"
+    char_name = "그꿈을덧그리며"
 
     # 옵션 생성
     options = webdriver.ChromeOptions()
@@ -116,7 +116,7 @@ async def test(ctx):
     await ctx.send("부적"+char_equip_charm.text)
     char_equip_emblem = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[4]/div/ul/li[3]/div')
     await ctx.send("문장"+char_equip_emblem.text)
-    '''
+    
 
     char_set = []
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[1]')
@@ -234,37 +234,151 @@ async def test(ctx):
     await ctx.send(char_set_t_1 + char_set_t_2 + char_set_t_3 
                  + char_set_t_4 + char_set_t_5 + char_set_t_6 
                  + char_set_t_7 + char_set_t_8 + char_set_t_9)
-
-
-    # 악세 팔찌 돌이름 각인서 전압개수 카드 보석 스킬렙 트포 룬 내실개수 원정대 selectmenu 로딩메세지
-    '''
+    
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[7]')
     ActionChains(driver).move_to_element(target).perform()
     char_acc_neck = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
     await ctx.send("목걸이" + char_acc_neck.text)
-
+    char_acc_neck_rate = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_acc_neck_qual = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_acc_neck_stat = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[6]')
+    char_acc_neck_active = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[7]')
+    await ctx.send("목걸이 등급" + char_acc_neck_rate.text)
+    await ctx.send("목걸이 품질" + char_acc_neck_qual.text)
+    await ctx.send("목걸이 특성 " + char_acc_neck_stat.text)
+    await ctx.send("목걸이 각인" + char_acc_neck_active.text)
+    
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[8]')
     ActionChains(driver).move_to_element(target).perform()
-    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("귀걸이1" + char_equip_weapon.text)
+    char_acc_ear_1 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("귀걸이1" + char_acc_ear_1.text)
+    char_acc_ear_1_rate = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_acc_ear_1_qual = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_acc_ear_1_stat = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[6]')
+    char_acc_ear_1_active = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[7]')
+    await ctx.send("귀걸이1 등급" + char_acc_ear_1_rate.text)
+    await ctx.send("귀걸이1 품질" + char_acc_ear_1_qual.text)
+    await ctx.send("귀걸이1 특성 " + char_acc_ear_1_stat.text)
+    await ctx.send("귀걸이1 각인" + char_acc_ear_1_active.text)
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[9]')
     ActionChains(driver).move_to_element(target).perform()
-    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("귀걸이2" + char_equip_weapon.text)
+    char_acc_ear_2 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("귀걸이2" + char_acc_ear_2.text)
+    char_acc_ear_2_rate = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_acc_ear_2_qual = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_acc_ear_2_stat = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[6]')
+    char_acc_ear_2_active = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[7]')
+    await ctx.send("귀걸이2 등급" + char_acc_ear_2_rate.text)
+    await ctx.send("귀걸이2 품질" + char_acc_ear_2_qual.text)
+    await ctx.send("귀걸이2 특성 " + char_acc_ear_2_stat.text)
+    await ctx.send("귀걸이2 각인" + char_acc_ear_2_active.text)
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[10]')
     ActionChains(driver).move_to_element(target).perform()
-    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("반지1" + char_equip_weapon.text)
+    char_acc_ring_1 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("반지1" + char_acc_ring_1.text)
+    char_acc_ring_1_rate = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_acc_ring_1_qual = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_acc_ring_1_stat = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[6]')
+    char_acc_ring_1_active = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[7]')
+    await ctx.send("반지1 등급" + char_acc_ring_1_rate.text)
+    await ctx.send("반지1 품질" + char_acc_ring_1_qual.text)
+    await ctx.send("반지1 특성 " + char_acc_ring_1_stat.text)
+    await ctx.send("반지1 각인" + char_acc_ring_1_active.text)
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[11]')
     ActionChains(driver).move_to_element(target).perform()
-    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
-    await ctx.send("반지2" + char_equip_weapon.text)
+    char_acc_ring_2 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    await ctx.send("반지2" + char_acc_ring_2.text)
+    char_acc_ring_2_rate = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_acc_ring_2_qual = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_acc_ring_2_stat = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[6]')
+    char_acc_ring_2_active = driver.find_element("xpath", '//*[@id="lostark-wrapper"]/div[2]/div[7]')
+    await ctx.send("반지2 등급" + char_acc_ring_2_rate.text)
+    await ctx.send("반지2 품질" + char_acc_ring_2_qual.text)
+    await ctx.send("반지2 특성 " + char_acc_ring_2_stat.text)
+    await ctx.send("반지2 각인" + char_acc_ring_2_active.text)
+    
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[14]') 
+    ActionChains(driver).move_to_element(target).perform() # 장착 각인
+    char_active_1_name = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/font[1]')
+    char_active_1_value = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/font[2]')
+    await ctx.send("장착 각인 1 이름" + char_active_1_name.text)
+    await ctx.send("장착 각인 1 값" + char_active_1_value.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[15]') 
+    ActionChains(driver).move_to_element(target).perform() # 장착 각인
+    char_active_1_name = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/font[1]')
+    char_active_1_value = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/font[2]')
+    await ctx.send("장착 각인 2 이름" + char_active_1_name.text)
+    await ctx.send("장착 각인 2 값" + char_active_1_value.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[13]') 
+    ActionChains(driver).move_to_element(target).perform() # 돌
+    char_stone_rate = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font') # 돌 등급
+    char_stone_active = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[7]') # 돌 효과
+    await ctx.send("돌 등급" + char_stone_rate.text)
+    await ctx.send("돌 효과" + char_stone_active.text)
+
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[12]') 
+    ActionChains(driver).move_to_element(target).perform() # 팔찌
+    char_brace_rate = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font') # 팔찌 등급
+    char_brace_active = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[5]') # 팔찌 효과
+    await ctx.send("팔찌 등급" + char_brace_rate.text)
+    await ctx.send("팔찌 효과" + char_brace_active.text)
     '''
 
+    # 아바타 탭으로 변경
+    driver.find_element("xpath",'//*[@id="profile-ability"]/div[1]/div[1]/a[2]').click() 
 
+    char_avartar_islegend = []
+    # 아바타 귀걸이 눈장식등 개수마다 번호가 계속 달라져서 한가지로 못할듯, 전체를 보고 판단하던가, 아바타 탭자체를 없애던가 하는게 편할거같음.
+    target = driver.find_element("xpath",'//*[@id="profile-avatar"]/div[2]/div[1]') 
+    ActionChains(driver).move_to_element(target).perform() # 전압 - 무기
+    char_avartar_1_grade = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')    
+    char_avartar_islegend.append(char_avartar_1_grade.text)
+    await ctx.send(char_avartar_islegend[0])
+
+    target = driver.find_element("xpath",'//*[@id="profile-avatar"]/div[2]/div[3]') 
+    ActionChains(driver).move_to_element(target).perform() # 전압 - 머리
+    char_avartar_2_grade = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_avartar_islegend.append(char_avartar_2_grade.text)
+    await ctx.send(char_avartar_islegend[1])
+    
+    target = driver.find_element("xpath",'//*[@id="profile-avatar"]/div[2]/div[6]') 
+    ActionChains(driver).move_to_element(target).perform() # 전압 - 상의
+    char_avartar_3_grade = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_avartar_islegend.append(char_avartar_3_grade.text)
+    await ctx.send(char_avartar_islegend[2])
+
+    target = driver.find_element("xpath",'//*[@id="profile-avatar"]/div[2]/div[7]') 
+    ActionChains(driver).move_to_element(target).perform() # 전압 - 하의
+    char_avartar_4_grade = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font')
+    char_avartar_islegend.append(char_avartar_4_grade.text)
+    await ctx.send(char_avartar_islegend[3])
+
+    cnt_legend = 0
+    cnt_hero = 0
+    for i in char_avartar_islegend:
+        if "전설" in i:
+            cnt_legend += 1
+        elif "영웅" in i:
+            cnt_hero += 1
+        else:
+            pass
+    await ctx.send(str(cnt_legend) + "전설아바타" + str(cnt_hero) + "영웅아바타")
+    '''
+    # 카드탭 이동
+    driver.find_element("xpath",'//*[@id="profile-ability"]/div[1]/div[1]/a[4]').click()
+
+    # 카드탭은 메모장에 적어놓고 메모장이랑 같으면 효과 나오고 그런식으로 하는게 편할거같음 문자열 안에 세구빛12, 18,30 체크, 암구빛12,18,30 체크, 암바절12,30 체크, 남바절12,30 체크, 세우라제 체크 등 
+
+    char_card = driver.find_element("xpath",'//*[@id="profile-card"]/div[2]/div')
+    await ctx.send(char_card.text)
+    '''
+    # 카드 보석 스킬렙 트포 룬 내실개수 원정대 selectmenu 로딩메세지
     driver.quit()
 
 
