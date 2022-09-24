@@ -1047,6 +1047,7 @@ async def 자투리(ctx):  # 자투리 링크버튼
 # ----------------------------------------------------------------------------------------- 프로필
 @bot.command()
 async def 프로필(ctx, name):
+    await ctx.send('베타버전 프로필')
     await ctx.send('프로필 검색중 입니다... 10초정도 소요됩니다')
     user = ctx.message.author.nick
     id = ctx.message.author.id  # id 가져오기
@@ -1152,6 +1153,7 @@ async def 프로필(ctx, name):
                     ,value=f'ㅤ', inline=True)
     await ctx.send(embed=embed)
     
+    await ctx.send('장비, 악세, 각인, 카드 등 추가 예정입니다')
 
     # 보석 / 스킬렙 트포 룬 원정대캐릭터 내실개수 로딩메세지
     driver.quit()
