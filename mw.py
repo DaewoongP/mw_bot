@@ -10,6 +10,10 @@ from discord_buttons_plugin import *
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver import ActionChains
+
+from collections import Counter
+import re
 
 event = []
 event_id = []
@@ -211,7 +215,6 @@ async def 패치노트(ctx):
     embed.add_field(name='📕 1. `!프로필` 기능 작업 약 70% 완료', value='`로아와 십새끼`', inline=False)
     embed.add_field(name='📘 2. `버그 개선`', value='`진짜 개선함`', inline=False)
     embed.add_field(name='📙 3. `이모티콘 개선`', value='괄호 삭제 및 `로아콘` 명칭 삭제', inline=False)
-    embed.add_field(name='📗 4. `예정사항`', value = '`로아 장비 검색기능 40% 완료`', inline=False)
     await ctx.send(embed=embed)
 
 @bot.command()
@@ -1043,82 +1046,116 @@ async def 자투리(ctx):  # 자투리 링크버튼
 
 # ----------------------------------------------------------------------------------------- 프로필
 @bot.command()
-async def 프로필(ctx, char_name):
-    await ctx.send('현재 로아와에서 봇을 막아버려서 기능이 안됩니다 ㅜㅜ') # 삭제
+async def 프로필(ctx, name):
+    await ctx.send('프로필 검색중 입니다... 10초정도 소요됩니다')
     user = ctx.message.author.nick
     id = ctx.message.author.id  # id 가져오기
     if user == None:
         user = ctx.message.author.name
 
+    char_name = str(name)
+
+    def gem_check(gem_text):
+        if "감소" in gem_text: # 홍염 2~20 1~10레벨
+            value = re.sub(r'[^0-9]','',gem_text)
+            value = int(value) // 200
+            value = str(value) + "홍"
+
+        elif "증가" in gem_text: # 멸화 3~24 1~8레벨 9레벨=30%, 10레벨=40%
+            value = re.sub(r'[^0-9]','',gem_text)
+            if int(value) < 2500:
+                value = int(value) // 300
+                value = str(value) + "멸"
+            elif int(value) == 3000:
+                value = "9멸"
+            elif int(value) == 4000:
+                value = "10멸"
+            else:
+                pass
+        else:
+            pass
+        return value
+
     # 옵션 생성
     options = webdriver.ChromeOptions()
     # 창 숨기는 옵션 추가
-    #options.add_argument("headless")
-    #options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+    options.add_argument("headless")
+    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
     url = 'https://lostark.game.onstove.com/Profile/Character/' + char_name
 
-    await ctx.send(url)
-
-    '''
-    
-    name = str(char_name)
-    url = url + name
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    driver.implicitly_wait(10)
     driver.get(url)
-    driver.implicitly_wait(5)
+
+    # xpath 값 대입 char_name값은 이미 적고들어옴
     
-    # 캐릭터 존재 확인
-    try:
-        await ctx.send(f'`{char_name}` 캐릭터 검색을 시작합니다.')
-        btn = driver.find_element_by_xpath('//*[@id="im_box"]/div/div[1]/button[2]')
-        btn.click()
-        driver.implicitly_wait(2)
-        #스킬부 없애기
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[7]').click()
-        driver.implicitly_wait(1)
-        #char_all = driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]')
-        #char_all.screenshot('screen_all.png')
-        #카드,각인,보석 없애기
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[6]').click()
-        driver.implicitly_wait(1)
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[5]').click()
-        driver.implicitly_wait(1)
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[4]').click()
-        driver.implicitly_wait(1)
-        #스샷 1
-        char_all_1 = driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]')
-        char_all_1.screenshot('screen_all_1.png')
-        #카드각인보석 복구
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[6]').click()
-        driver.implicitly_wait(1)
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[5]').click()
-        driver.implicitly_wait(1)
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[4]').click()
-        driver.implicitly_wait(1)
-        #장비 없애기
-        driver.find_element_by_xpath('//*[@id="im_box"]/div/div[3]/div[2]/div[1]/div/label[3]').click()
-        driver.implicitly_wait(1)
-        #스샷 2
-        char_all_2 = driver.find_element_by_xpath('//*[@id="char-card-body"]/div[2]')
-        char_all_2.screenshot('screen_all_2.png')
+    char_server = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[1]/span[3]')
+    char_attack = driver.find_element("xpath",'//*[@id="profile-ability"]/div[2]/ul/li[1]/span[2]')
+    char_atk = char_attack.text
+    char_health = driver.find_element("xpath",'//*[@id="profile-ability"]/div[2]/ul/li[2]/span[2]')
+    char_hp = char_health.text
 
-        # 이미지 확대 
-        img_char = cv2.imread('screen_all_1.png')
-        img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
-        cv2.imwrite('screen_all_1.png', img_2x)
+    char_stat_crit = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[1]/span[2]') #치명
+    char_crit = char_stat_crit.text
 
-        # 이미지 출력 부
-        with open('screen_all_1.png', 'rb') as f:
-            picture = discord.File(f)
-            await ctx.send(file=picture)
-        with open('screen_all_2.png', 'rb') as f:
-            picture = discord.File(f)
-            await ctx.send(file=picture)
+    char_stat_special = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[2]/span[2]') #특화
+    char_special = char_stat_special.text
 
-    except:
-        await ctx.send('오타가 났거나 캐릭터 갱신 중이니 다시 검색해봐')
-    '''
+    char_stat_dominate = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[3]/span[2]') #제압
+    char_dominate = char_stat_dominate.text
+
+    char_stat_swift = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[4]/span[2]') #신속
+    char_swift = char_stat_swift.text
+
+    char_stat_endure = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[5]/span[2]') #인내
+    char_endure = char_stat_endure.text
+
+    char_stat_expertise = driver.find_element("xpath",'//*[@id="profile-ability"]/div[3]/ul/li[6]/span[2]') #숙련
+    char_expertise = char_stat_expertise.text
+    
+    char_total_LV = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[1]/div[1]/span[2]')
+    char_LV = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[1]/div[2]/span[2]')
+    char_item_LV = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[2]/div[2]/span[2]')
+    char_title = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[3]/div[1]/span[2]')
+    char_guild = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[3]/div[2]/span[2]')
+    char_territory = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[3]/div[4]/span[2]')
+    char_territory_name = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[3]/div[4]/span[3]')
+    char_equip_compass = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[4]/div/ul/li[1]/div')
+    char_equip_charm = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[4]/div/ul/li[2]/div')
+    char_equip_emblem = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div/main/div/div[3]/div[1]/div[4]/div/ul/li[3]/div')
+    
+    char_set = []
+    target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[6]')
+    ActionChains(driver).move_to_element(target).perform()
+    char_equip_weapon = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
+    char_equip_weapon_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
+    char_set_1 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[1]')
+    char_set.append(char_set_1.text) # 무기 세트효과까지 뽑아냄
+    
+    # 무기 정보에서 직업 가져옴
+    char_class = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[3]/font')
+    class_text_len = len(char_class.text) - 3
+    char_class = char_class.text[:class_text_len]
+
+    # 왠진 모르지만 selenium으로 가져온 순수 숫자 파일이 카드탭으로 넘어오면서 증발하는 버그 같은게 있음. 다시 다른 변수에 넣어주면서 해결
+    embed = discord.Embed(title='프로필 검색', color=random.choice(colors))
+    embed.add_field(name=f'`[닉네임]` : {char_name}\n' + f'`[서버]` : {char_server.text}\n'
+                    +f'`[영지이름]` : {char_territory_name.text}\n' + f'`[영지레벨]` : {char_territory.text}\n\n'
+                    +f'`[특성]`\n' + f'`[치명]` : {char_crit}\n'
+                    +f'`[특화]` : {char_special}\n' + f'`[제압]` : {char_dominate}\n'
+                    +f'`[신속]` : {char_swift}\n' + f'`[인내]` : {char_endure}\n'
+                    +f'`[숙련]` : {char_expertise}\n'
+                    ,value=f'ㅤ', inline=True)
+    embed.add_field(name=f'`[직업]` : {char_class}\n' + f'`[칭호]` : {char_title.text}\n'
+                    +f'`[공격력]` : {char_atk}\n' + f'`[체력]` : {char_hp}\n\n'
+                    +f'`[원정대레벨]` : {char_total_LV.text}\n' + f'`[아이템레벨]` : {char_item_LV.text}\n'
+                    +f'`[전투레벨]` : {char_LV.text}\n'
+                    ,value=f'ㅤ', inline=True)
+    await ctx.send(embed=embed)
+    
+
+    # 보석 / 스킬렙 트포 룬 원정대캐릭터 내실개수 로딩메세지
+    driver.quit()
+
 
 # -------------------------------------------------------------------------------------- 운세
 @bot.command()
