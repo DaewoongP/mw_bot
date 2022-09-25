@@ -395,10 +395,10 @@ async def 강화(ctx):
     # 강화 상태에 따른 확률 설정값
     rf_effect = 0x000000
     if rf == 0:
-        success = 0.05
+        success = 0.25
         rf_effect = 0x000000
     elif rf == 1:
-        success = 0.01
+        success = 0.25
         rf_effect = 0x000000
     elif rf == 2:
         success = 0.005
@@ -448,9 +448,9 @@ async def 강화(ctx):
         embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
-        embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
+        embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
         embed.add_field(name='누른 횟수', value=f'{rf_try}번 만에 성공', inline=True)
-        await ctx.send(embed=embed)
+        await channel.send(embed=embed)
 
     # 강화 하락
     elif level == rf_name[2]:
@@ -475,9 +475,9 @@ async def 강화(ctx):
             embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
             embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
             embed.add_field(name='하락 확률', value=f'{success * 100}%', inline=True)
-            embed.add_field(name='강화 상태', value=f'{rf} => {rf - 1}', inline=False)
+            embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
             embed.add_field(name='누른 횟수', value=f'{rf_try}번이나 눌렀는데 떨어짐 ㅠ', inline=True)
-            await ctx.send(embed=embed)
+            await channel.send(embed=embed)
 
 
     # 강화 실패?
@@ -519,7 +519,7 @@ async def 강화확률(ctx, k):
         await ctx.send('`0.01%`')
     else:
         await ctx.send('강화 수치 제대로 입력 해줘')
-        
+
 # -------------------------------------------------------------------------------------- 이벤트
 @bot.command()
 async def 이벤트(ctx):  # 이벤트 리스트에 멤버 입력
