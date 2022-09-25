@@ -213,6 +213,7 @@ async def 패치노트(ctx):
     embed = discord.Embed(title='📖 머웅 봇 v3.0 패치노트', color=random.choice(colors))
     # 📕📘📙📗
     embed.add_field(name='📕 1. `!프로필` 베타버전', value='`추가 작업 중`', inline=False)
+    embed.add_field(name='📘 2. `!강화`', value='`에스더 강화 패치 추가 하락확률 = 강화확률`', inline=False)
     await ctx.send(embed=embed)
 
 @bot.command()
@@ -395,10 +396,10 @@ async def 강화(ctx):
     # 강화 상태에 따른 확률 설정값
     rf_effect = 0x000000
     if rf == 0:
-        success = 0.25
+        success = 0.05
         rf_effect = 0x000000
     elif rf == 1:
-        success = 0.25
+        success = 0.01
         rf_effect = 0x000000
     elif rf == 2:
         success = 0.005
