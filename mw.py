@@ -377,7 +377,7 @@ async def 닉변(ctx, member: discord.Member,*, nick):  # !닉변 머웅2 123 # 
 
 # -------------------------------------------------------------------------------------- 강화
 @bot.command()
-@commands.cooldown(1, 600, commands.BucketType.user)
+#@commands.cooldown(1, 600, commands.BucketType.user) #서버 자체에 쿨타임 생성
 async def 강화(ctx):
     # 명령어 입력한 사람 id, 강화 수치 가져오기
     id = ctx.message.author.id  # id 가져오기
@@ -389,54 +389,44 @@ async def 강화(ctx):
         text_file.append('0\n')
     rf_id = text_file.index(f'{id}\n')  # 텍스트파일 id의 위치
     rf = int(text_file[rf_id + 1])  # id에 따른 강화수치 => str
-    jangi = float(text_file[rf_id + 2])  # 장기 수치 => str
+    rf_try = int(text_file[rf_id + 2])  # 누른 횟수
     f.close()  # 파일 읽기 종료
 
     # 강화 상태에 따른 확률 설정값
     rf_effect = 0x000000
-    if rf < 3:
-        success = 1
+    if rf == 0:
+        success = 0.05
         rf_effect = 0x000000
-    elif rf < 6:
-        success = 0.9
-        rf_effect = 0x000000
-    elif rf < 9:
-        success = 0.6
-        rf_effect = 0xff0000
-    elif rf < 11:
-        success = 0.3
-        rf_effect = 0xff8c00
-    elif rf < 13:
-        success = 0.2
-        rf_effect = 0xffff00
-    elif rf < 15:
-        success = 0.1
-        rf_effect = 0x008000
-    elif rf < 17:
-        success = 0.04
-        rf_effect = 0x0033ff
-    elif rf < 19:
-        success = 0.03
-        rf_effect = 0x4b0082
-    elif rf < 21:
-        success = 0.015
-        rf_effect = 0x800080
-    elif rf < 23:
+    elif rf == 1:
         success = 0.01
-        rf_effect = 0xff8c00
-    elif rf < 25:
+        rf_effect = 0x000000
+    elif rf == 2:
         success = 0.005
-        rf_effect = 0x7d0328
-    elif rf == 25:
-        await ctx.send('25강에 이미 도착하셨네요! 에스더 강화 패치를 기대해주세요 ^^')
-        await ctx.send('`!강화확인`을 통해서 자신의 강화상태를 확인 가능합니다')
+        rf_effect = 0xff0000
+    elif rf == 3:
+        success = 0.0025
+        rf_effect = 0xff8c00
+    elif rf == 4:
+        success = 0.001
+        rf_effect = 0xffff00
+    elif rf == 5:
+        success = 0.0005
+        rf_effect = 0x008000
+    elif rf == 6:
+        success = 0.00025
+        rf_effect = 0x0033ff
+    elif rf == 7:
+        success = 0.0001
+        rf_effect = 0x4b0082
+    elif rf == 8:
+        await ctx.send('이걸 8강을 성공하셨네 ㄷㄷ')
 
-    if jangi == 100:
-        success = 1
+
+    rf_try += 1
 
     # 강화 상태 메세지
-    rf_name = ['강화 성공', '강화 실패']
-    level = np.random.choice(rf_name, p=[success, 1 - success])  # 강화 상태
+    rf_name = ['강화 성공', '강화 실패', '강화 하락']
+    level = np.random.choice(rf_name, p=[success, 1 - (success*2), success])  # 강화 상태
 
     # 강화 성공?
     if level == rf_name[0]:
@@ -444,34 +434,54 @@ async def 강화(ctx):
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
         embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
-        embed.add_field(name='이전 강화 수치', value=f'<@{id}> : {rf}강', inline=True)
+        embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
         embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
-        embed.add_field(name='장인의 기운', value=f'{jangi:.2f}%에서 성공', inline=True)
+        embed.add_field(name='누른 횟수', value=f'{rf_try}번 만에 성공', inline=True)
         await ctx.send(embed=embed)
-        jangi = 0
         rf += 1  # 강화 수치 증가 (성공)
-        if rf >= 19: # 19강부터 강화성공시 비틱
-            channel = bot.get_channel(323766857708470272)
-            embed = discord.Embed(title='```강화 성공 !!```', color=rf_effect)
+
+        channel = bot.get_channel(323766857708470272)
+        embed = discord.Embed(title='```강화 성공 !!```', color=rf_effect)
+        embed.set_thumbnail(
+            url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
+        embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
+        embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
+        embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
+        embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
+        embed.add_field(name='누른 횟수', value=f'{rf_try}번 만에 성공', inline=True)
+        await ctx.send(embed=embed)
+
+    # 강화 하락
+    elif level == rf_name[2]:
+        if rf == 0:
+            await ctx.send('와 1강도 안붙었는데 하락 확률을 뚫으셨네요 ㅋㅋ')
+        else:
+            embed = discord.Embed(title='```강화 하락 ㄷㄷ```', color=rf_effect)
             embed.set_thumbnail(
                 url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
             embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
-            embed.add_field(name='이전 강화 수치', value=f'<@{id}> : {rf}강', inline=True)
-            embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
-            embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
-            await channel.send(embed=embed)
+            embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
+            embed.add_field(name='하락 확률', value=f'{success * 100}%', inline=True)
+            embed.add_field(name='강화 상태', value=f'{rf} => {rf - 1}', inline=False)
+            embed.add_field(name='누른 횟수', value=f'{rf_try}번이나 눌렀는데 떨어짐 ㅠ', inline=True)
+            await ctx.send(embed=embed)
+            rf -= 1 # 강화 수치 하락 (실패)
+
+            channel = bot.get_channel(323766857708470272)
+            embed = discord.Embed(title='```강화 하락 ㄷㄷ```', color=rf_effect)
+            embed.set_thumbnail(
+                url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
+            embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
+            embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
+            embed.add_field(name='하락 확률', value=f'{success * 100}%', inline=True)
+            embed.add_field(name='강화 상태', value=f'{rf} => {rf - 1}', inline=False)
+            embed.add_field(name='누른 횟수', value=f'{rf_try}번이나 눌렀는데 떨어짐 ㅠ', inline=True)
+            await ctx.send(embed=embed)
 
 
     # 강화 실패?
     else:
-        # ------------------ 장인의 기운 시스템
-        jangi_percent = success * 100 * 0.465
-        jangi += float(jangi_percent)
-        # 장기백 확인
-        if jangi >= 100:
-            jangi = 100
-
         embed = discord.Embed(title='```강화 실패 ㅠㅠ```', color=rf_effect)
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
@@ -479,111 +489,37 @@ async def 강화(ctx):
         embed.add_field(name='현재 강화 수치', value=f'{rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
         embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
-        embed.add_field(name='장인의 기운', value=f'{jangi:.2f}%', inline=True)
+        embed.add_field(name='누른 횟수', value=f'{rf_try}번 누름', inline=True)
         await ctx.send(embed=embed)
 
     text_file[rf_id + 1] = str(f'{rf}\n')  # str \n 형태로 강화 수치값 넣어주기
-    text_file[rf_id + 2] = str(f'{jangi:.2f}\n')  # 마찬가지로 장기백값 넣어주기
+    text_file[rf_id + 2] = str(f'{rf_try}\n')  # 마찬가지로 장기백값 넣어주기
     f = open('C:\\Users\\qsc14\\Desktop\\discord\\rf.txt', 'w')
     f.writelines(text_file)
     f.close()
 
-
-@bot.command()
-async def 강화확인(ctx):
-    # 명령어 입력한 사람 id, 강화 수치 가져오기
-    id = ctx.message.author.id  # id 가져오기
-    f = open('C:\\Users\\qsc14\\Desktop\\discord\\rf.txt', 'r')
-    text_file = f.readlines()
-    if f'{id}\n' not in text_file:
-        await ctx.send('```!강화 부터 하고 확인해줘```')
-    rf_id = text_file.index(f'{id}\n')  # 텍스트파일 id의 위치
-    rf = int(text_file[rf_id + 1])  # id에 따른 강화수치 => str
-    jangi = float(text_file[rf_id + 2])  # 장기 수치 => str
-    f.close()  # 파일 읽기 종료
-    # -------------------------------------확률표
-    rf_effect = 0x000000
-    if rf < 3:
-        success = 1
-        rf_effect = 0x000000
-    elif rf < 6:
-        success = 0.9
-        rf_effect = 0x000000
-    elif rf < 9:
-        success = 0.6
-        rf_effect = 0xff0000
-    elif rf < 11:
-        success = 0.3
-        rf_effect = 0xff8c00
-    elif rf < 13:
-        success = 0.2
-        rf_effect = 0xffff00
-    elif rf < 15:
-        success = 0.1
-        rf_effect = 0x008000
-    elif rf < 17:
-        success = 0.04
-        rf_effect = 0x0033ff
-    elif rf < 19:
-        success = 0.03
-        rf_effect = 0x4b0082
-    elif rf < 21:
-        success = 0.015
-        rf_effect = 0x800080
-    elif rf < 23:
-        success = 0.01
-        rf_effect = 0xff8c00
-    elif rf < 25:
-        success = 0.005
-        rf_effect = 0x7d0328
-    elif rf == 25:
-        success = 0
-        rf_effect = 0xffffff
-    else:
-        await ctx.send('잘못입력했어!')
-
-    # ---------------------------------------
-    embed = discord.Embed(title='```현재 강화 확인```', color = rf_effect)
-    embed.set_thumbnail(
-        url='https://cdn.discordapp.com/attachments/957612748978683914/960451886740291624/unknown.png')
-    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
-    embed.add_field(name='현재 강화 수치', value=f'{rf}강', inline=True)
-    embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
-    embed.add_field(name='장인의 기운', value=f'{jangi:.2f}%', inline=False)
-    await ctx.send(embed=embed)
-
-
 @bot.command()
 async def 강화확률(ctx, k):
     n = int(k)
-    if n < 3:
-        await ctx.send('`100%`')
-    elif n < 6:
-        await ctx.send('`90%`')
-    elif n < 9:
-        await ctx.send('`60%`')
-    elif n < 11:
-        await ctx.send('`30%`')
-    elif n < 13:
-        await ctx.send('`20%`')
-    elif n < 15:
-        await ctx.send('`10%`')
-    elif n < 17:
-        await ctx.send('`4%`')
-    elif n < 19:
-        await ctx.send('`3%`')
-    elif n < 21:
-        await ctx.send('`1.5`%')
-    elif n < 23:
+    if n == 1:
+        await ctx.send('`5%`')
+    elif n == 2:
         await ctx.send('`1%`')
-    elif n < 25:
+    elif n == 3:
         await ctx.send('`0.5%`')
-    elif n == 25:
-        await ctx.send('25강이 끝이야')
+    elif n == 4:
+        await ctx.send('`0.25%`')
+    elif n == 5:
+        await ctx.send('`0.1%`')
+    elif n == 6:
+        await ctx.send('`0.05%`')
+    elif n == 7:
+        await ctx.send('`0.025%`')
+    elif n == 8:
+        await ctx.send('`0.01%`')
     else:
         await ctx.send('강화 수치 제대로 입력 해줘')
-
-
+        
 # -------------------------------------------------------------------------------------- 이벤트
 @bot.command()
 async def 이벤트(ctx):  # 이벤트 리스트에 멤버 입력
