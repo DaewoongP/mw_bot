@@ -16,7 +16,6 @@ from selenium.webdriver import ActionChains
 # opencv
 import cv2
 
-from collections import Counter
 import re
 
 
@@ -66,27 +65,6 @@ async def test(ctx, name):
         user = ctx.message.author.name
 
     char_name = str(name)
-
-    def gem_check(gem_text):
-        if "감소" in gem_text: # 홍염 2~20 1~10레벨
-            value = re.sub(r'[^0-9]','',gem_text)
-            value = int(value) // 200
-            value = str(value) + "홍"
-
-        elif "증가" in gem_text: # 멸화 3~24 1~8레벨 9레벨=30%, 10레벨=40%
-            value = re.sub(r'[^0-9]','',gem_text)
-            if int(value) < 2500:
-                value = int(value) // 300
-                value = str(value) + "멸"
-            elif int(value) == 3000:
-                value = "9멸"
-            elif int(value) == 4000:
-                value = "10멸"
-            else:
-                pass
-        else:
-            pass
-        return value
 
     # 옵션 생성
     options = webdriver.ChromeOptions()
@@ -142,6 +120,9 @@ async def test(ctx, name):
     char_equip_weapon_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_1 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[1]')
     char_set.append(char_set_1.text) # 무기 세트효과까지 뽑아냄
+    equip_weapon = char_equip_weapon.text
+    equip_weapon_qual = char_equip_weapon_qual.text
+
     
     # 무기 정보에서 직업 가져옴
     char_class = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[3]/font')
@@ -155,6 +136,8 @@ async def test(ctx, name):
     char_equip_head_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_2 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[2]')
     char_set.append(char_set_2.text) # 머리
+    equip_head = char_equip_head.text
+    equip_head_qual = char_equip_head_qual.text
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[2]')
     ActionChains(driver).move_to_element(target).perform()
@@ -162,6 +145,8 @@ async def test(ctx, name):
     char_equip_shoulder_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_3 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[6]')
     char_set.append(char_set_3.text) # 어깨
+    equip_shoulder = char_equip_shoulder.text
+    equip_shoulder_qual = char_equip_shoulder_qual.text
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[3]')
     ActionChains(driver).move_to_element(target).perform()
@@ -169,6 +154,8 @@ async def test(ctx, name):
     char_equip_chestpiece_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_4 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[3]')
     char_set.append(char_set_4.text) # 상의
+    equip_chestpiece = char_equip_chestpiece.text
+    equip_chestpiece_qual = char_equip_chestpiece_qual.text
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[4]')
     ActionChains(driver).move_to_element(target).perform()
@@ -176,6 +163,8 @@ async def test(ctx, name):
     char_equip_pants_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_5 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[4]')
     char_set.append(char_set_5.text) # 하의
+    equip_pants = char_equip_pants.text
+    equip_pants_qual = char_equip_pants_qual.text
 
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[5]')
     ActionChains(driver).move_to_element(target).perform()
@@ -183,6 +172,8 @@ async def test(ctx, name):
     char_equip_gloves_qual = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[5]/span[1]')
     char_set_6 = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[10]/div[1]/span[5]')
     char_set.append(char_set_6.text) # 장갑
+    equip_gloves = char_equip_gloves.text
+    equip_gloves_qual = char_equip_gloves_qual.text
     
     # char_set list에 세트효과가 각각 들어가있음
     # 세트효과 초기화
@@ -387,69 +378,135 @@ async def test(ctx, name):
     else:
         char_card = "X"
 
+    def gem_check(gem_text):
+        if "감소" in gem_text: # 홍염 2~20 1~10레벨
+            value = re.sub(r'[^0-9]','',gem_text)
+            value = int(value) // 200
+            value = str(value) + "홍"
+
+        elif "증가" in gem_text: # 멸화 3~24 1~8레벨 9레벨=30%, 10레벨=40%
+            value = re.sub(r'[^0-9]','',gem_text)
+            if int(value) < 2500:
+                value = int(value) // 300
+                value = str(value) + "멸"
+            elif int(value) == 3000:
+                value = "9멸"
+            elif int(value) == 4000:
+                value = "10멸"
+            else:
+                pass
+        else:
+            pass
+        return value
+
     # 보석 탭 클릭
     driver.find_element("xpath",'//*[@id="profile-ability"]/div[1]/div[1]/a[3]').click()
-
-    char_gem = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[1]/p') # 1~11번 보석
-    char_gem_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[1]/p/font')
+    
+    char_gem_1 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[1]/p') # 1~11번 보석
+    char_gem_1_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[1]/p/font')
+    char_gem_2 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[2]/p')
+    char_gem_2_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[2]/p/font')
+    char_gem_3 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[3]/p')
+    char_gem_3_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[3]/p/font')
+    char_gem_4 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[4]/p')
+    char_gem_4_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[4]/p/font')
+    char_gem_5 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[5]/p')
+    char_gem_5_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[5]/p/font')
+    char_gem_6 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[6]/p')
+    char_gem_6_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[6]/p/font')
+    char_gem_7 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[7]/p')
+    char_gem_7_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[7]/p/font')
+    char_gem_8 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[8]/p')
+    char_gem_8_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[8]/p/font')
+    char_gem_9 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[9]/p')
+    char_gem_9_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[9]/p/font')
+    char_gem_10 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[10]/p')
+    char_gem_10_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[10]/p/font')
+    char_gem_11 = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[11]/p')
+    char_gem_11_name = driver.find_element("xpath",'//*[@id="profile-jewel"]/div/div[2]/div/ul/li[11]/p/font')
     #await ctx.send(gem_check(char_gem.text))
-
+    
     # 왠진 모르지만 selenium으로 가져온 순수 숫자 파일이 카드탭으로 넘어오면서 증발하는 버그 같은게 있음. 다시 다른 변수에 넣어주면서 해결
-    embed = discord.Embed(title='프로필 검색', color=random.choice(colors))
-    embed.add_field(name=f'`[닉네임]` : {char_name}\n' + f'`[서버]` : {char_server.text}\n'
+    page0 = discord.Embed(title='프로필 검색', color=random.choice(colors))
+    page0.add_field(name=f'`[닉네임]` : {char_name}\n' + f'`[서버]` : {char_server.text}\n'
                     +f'`[영지이름]` : {char_territory_name.text}\n' + f'`[영지레벨]` : {char_territory.text}\n\n'
                     +f'`[특성]`\n' + f'`[치명]` : {char_crit}\n'
                     +f'`[특화]` : {char_special}\n' + f'`[제압]` : {char_dominate}\n'
                     +f'`[신속]` : {char_swift}\n' + f'`[인내]` : {char_endure}\n'
                     +f'`[숙련]` : {char_expertise}\n'
                     ,value=f'ㅤ', inline=True)
-    embed.add_field(name=f'`[직업]` : {char_class}\n' + f'`[칭호]` : {char_title.text}\n'
+    page0.add_field(name=f'`[직업]` : {char_class}\n' + f'`[칭호]` : {char_title.text}\n'
                     +f'`[공격력]` : {char_atk}\n' + f'`[체력]` : {char_hp}\n\n'
                     +f'`[원정대레벨]` : {char_total_LV.text}\n' + f'`[아이템레벨]` : {char_item_LV.text}\n'
                     +f'`[전투레벨]` : {char_LV.text}\n'
                     ,value=f'ㅤ', inline=True)
-    await ctx.send(embed=embed)
+
+    page1 = discord.Embed(title='장비', color=random.choice(colors))
+    page1.add_field(name=f'`[머리]` : {equip_head}\n'
+                    + f'`[어깨]` : {equip_shoulder}\n'
+                    + f'`[상의]` : {equip_chestpiece}\n'
+                    + f'`[하의]` : {equip_pants}\n'
+                    + f'`[장갑]` : {equip_gloves}\n'
+                    + f'`[무기]` : {equip_weapon}\n'
+                    ,value=f'ㅤ', inline=True)
+    page1.add_field(name=f'`[품질]` : {equip_head_qual}\n'
+                    + f'`[품질]` : {equip_shoulder_qual}\n'
+                    + f'`[품질]` : {equip_chestpiece_qual}\n'
+                    + f'`[품질]` : {equip_pants_qual}\n'
+                    + f'`[품질]` : {equip_gloves_qual}\n'
+                    + f'`[품질]` : {equip_weapon_qual}\n'
+                    ,value=f'ㅤ', inline=True)
+    page2 = discord.Embed(title='카드 & 보석', color=random.choice(colors))
+    page2.add_field(name=f'`[{gem_check(char_gem_1.text)}]` : {char_gem_1_name.text}\n'
+                    + f'`[{gem_check(char_gem_2.text)}]` : {char_gem_2_name.text}\n'
+                    + f'`[{gem_check(char_gem_3.text)}]` : {char_gem_3_name.text}\n'
+                    + f'`[{gem_check(char_gem_4.text)}]` : {char_gem_4_name.text}\n'
+                    + f'`[{gem_check(char_gem_5.text)}]` : {char_gem_5_name.text}\n'
+                    + f'`[{gem_check(char_gem_6.text)}]` : {char_gem_6_name.text}\n'
+                    + f'`[{gem_check(char_gem_7.text)}]` : {char_gem_7_name.text}\n'
+                    + f'`[{gem_check(char_gem_8.text)}]` : {char_gem_8_name.text}\n'
+                    + f'`[{gem_check(char_gem_9.text)}]` : {char_gem_9_name.text}\n'
+                    + f'`[{gem_check(char_gem_10.text)}]` : {char_gem_10_name.text}\n'
+                    + f'`[{gem_check(char_gem_11.text)}]` : {char_gem_11_name.text}\n'
+                    ,value=f'ㅤ', inline=True)
+    page2.add_field(name=f'`[장착 카드]` : {char_card}',value=f'ㅤ', inline=False)
+
+
+    pages = [page0,page1,page2]
+
+    message = await ctx.send(embed=page0)
+
+    await message.add_reaction('💡')
+    await message.add_reaction('⚔️')
+    await message.add_reaction('💎')
+
+    def check(reaction, user):
+        return user == ctx.author
+
+    i = 0
+    reaction = None
+
+    while True: # 리액션에 따른 임베드 출력
+        if str(reaction) == '💡':
+            i = 0
+            await message.edit(embed=pages[i])
+        elif str(reaction) == '⚔️':
+            i = 1
+            await message.edit(embed=pages[i])
+        elif str(reaction) == '💎':
+            i = 2
+            await message.edit(embed=pages[i])
+
+        try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=600, check=check)
+            await message.remove_reaction(reaction, user)
+        except:
+            break
+
+    await message.clear_reactions()
+
+    driver.quit()
     
-
-    # 보석 / 스킬렙 트포 룬 원정대캐릭터 내실개수 로딩메세지
-    driver.quit()
-
-
-
-@bot.command()
-async def 운세(ctx,date):
-    user = ctx.message.author.nick
-    id = ctx.message.author.id  # id 가져오기
-    if user == None:
-        user = ctx.message.author.name
-    # 옵션 생성
-    options = webdriver.ChromeOptions()
-    # 창 숨기는 옵션 추가
-    options.add_argument("headless")
-    options.add_argument('--window-size=2560x9999')
-    options.add_argument('--log-level=3')
-    options.add_experimental_option('excludeSwitches',['enable-logging'])
-    url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=%EC%98%A4%EB%8A%98%EC%9D%98%EC%9A%B4%EC%84%B8'
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    driver.get(url)
-    birth = driver.find_element("xpath",'//*[@id="srch_txt"]') # x-path값 대입 (셀레늄 3버전, 4버전 코드다름)
-    birth.click()
-    birth.clear() # 텍스트창 클릭후 적혀있는 글 제거 후 입력 (크롬 버전에 따라 달랐던거로..)
-    birth.send_keys(date)
-    btn = driver.find_element("xpath",'//*[@id="fortune_birthCondition"]/div[1]/fieldset/input')
-    btn.click()
-    driver.implicitly_wait(2) # 버튼 입력 후 element가 나오는 시간 기다리기
-    fortune_main = driver.find_element("xpath",'//*[@id="fortune_birthResult"]/dl[1]/dd/strong')
-    fortune_sub = driver.find_element("xpath",'//*[@id="fortune_birthResult"]/dl[1]/dd/p')
-
-    fortune_sub_list = fortune_sub.text.split('.')
-    ft_sub = '\n'.join(fortune_sub_list)
-    embed = discord.Embed(title='🍀 오늘의 운세', color=random.choice(colors))  # 임베드 타이틀 - 섬네일 - 필드 - 푸터 순서 잘지키기
-    embed.add_field(name=f'✒️ {fortune_main.text}', value=f'`{ft_sub}`', inline=False)
-    embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
-    await ctx.send(embed=embed)
-    driver.quit()
-
 @bot.event
 async def on_ready():
     print('We have loggedd in as {0.user}'.format(bot))
