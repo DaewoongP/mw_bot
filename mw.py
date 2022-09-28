@@ -440,7 +440,7 @@ async def 강화(ctx):
         embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
         embed.add_field(name='누른 횟수', value=f'{rf_try}번 만에 성공', inline=True)
         await ctx.send(embed=embed)
-        rf += 1  # 강화 수치 증가 (성공)
+        
 
         channel = bot.get_channel(323766857708470272)
         embed = discord.Embed(title='```강화 성공 !!```', color=rf_effect)
@@ -449,9 +449,11 @@ async def 강화(ctx):
         embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
         embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
         embed.add_field(name='강화 확률', value=f'{success * 100}%', inline=True)
-        embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
+        embed.add_field(name='강화 상태', value=f'{rf} => {rf + 1}', inline=False)
         embed.add_field(name='누른 횟수', value=f'{rf_try}번 만에 성공', inline=True)
         await channel.send(embed=embed)
+
+        rf += 1  # 강화 수치 증가 (성공)
 
     # 강화 하락
     elif level == rf_name[2]:
@@ -467,8 +469,7 @@ async def 강화(ctx):
             embed.add_field(name='강화 상태', value=f'{rf} => {rf - 1}', inline=False)
             embed.add_field(name='누른 횟수', value=f'{rf_try}번이나 눌렀는데 떨어짐 ㅠ', inline=True)
             await ctx.send(embed=embed)
-            rf -= 1 # 강화 수치 하락 (실패)
-
+            
             channel = bot.get_channel(323766857708470272)
             embed = discord.Embed(title='```강화 하락 ㄷㄷ```', color=rf_effect)
             embed.set_thumbnail(
@@ -476,9 +477,12 @@ async def 강화(ctx):
             embed.set_author(name=ctx.author.display_name, icon_url=ctx.author.avatar)
             embed.add_field(name='이전 강화 수치', value=f'{rf}강', inline=True)
             embed.add_field(name='하락 확률', value=f'{success * 100}%', inline=True)
-            embed.add_field(name='강화 상태', value=f'{rf} => {rf}', inline=False)
+            embed.add_field(name='강화 상태', value=f'{rf} => {rf - 1}', inline=False)
             embed.add_field(name='누른 횟수', value=f'{rf_try}번이나 눌렀는데 떨어짐 ㅠ', inline=True)
             await channel.send(embed=embed)
+
+            rf -= 1 # 강화 수치 하락 (실패)
+
 
 
     # 강화 실패?
