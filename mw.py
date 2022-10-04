@@ -1434,16 +1434,6 @@ async def 프로필(ctx, name):
 
     driver.quit()
     
-@bot.event
-async def on_ready():
-    print('We have loggedd in as {0.user}'.format(bot))
-    await bot.change_presence(status=discord.Status.idle,
-                              activity=discord.Game(name='!도움 / 이벤트'))
-
-
-
-
-bot.run(token)  # token
 
 # -------------------------------------------------------------------------------------- 운세
 @bot.command()
