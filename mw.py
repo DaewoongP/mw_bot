@@ -1157,7 +1157,23 @@ async def 프로필(ctx, name):
     #await ctx.send(char_set_t_1 + char_set_t_2 + char_set_t_3 
     #             + char_set_t_4 + char_set_t_5 + char_set_t_6 
     #             + char_set_t_7 + char_set_t_8 + char_set_t_9)
+    char_set_name = char_set_t_1 + char_set_t_2 + char_set_t_3 + char_set_t_4 + char_set_t_5 + char_set_t_6 + char_set_t_7 + char_set_t_8 + char_set_t_9
 
+    #각인 효과
+    #char_active_1 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[1]/span')
+    #char_active_2 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[2]/span')
+    #char_active_3 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[3]/span')
+    #char_active_4 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[4]/span')
+    #char_active_5 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[5]/span')
+    #char_active_6 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[6]/span')
+    char_active = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]')
+    #await ctx.send(char_active.text)
+    char_active_1 = char_active.text
+    target = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[2]/div[3]').click()
+    char_active = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[2]')
+    #await ctx.send(char_active.text)
+    char_active_2 = char_active.text
+    '''# 악세는 안하는게 나을듯?
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[7]')
     ActionChains(driver).move_to_element(target).perform()
     char_acc_neck = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[1]/p/font')
@@ -1217,7 +1233,7 @@ async def 프로필(ctx, name):
     ActionChains(driver).move_to_element(target).perform() # 팔찌
     char_brace_rate = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[2]/span[2]/font/font') # 팔찌 등급
     char_brace_active = driver.find_element("xpath",'//*[@id="lostark-wrapper"]/div[2]/div[5]') # 팔찌 효과
-    
+    '''
 
     '''
     # 아바타 탭으로 변경
@@ -1382,6 +1398,7 @@ async def 프로필(ctx, name):
                     + f'`[품질]` : {equip_pants_qual}\n'
                     + f'`[품질]` : {equip_gloves_qual}\n'
                     + f'`[품질]` : {equip_weapon_qual}\n'
+                    + f'`[세트효과]` : {char_set_name}\n'
                     ,value=f'ㅤ', inline=True)
     page2 = discord.Embed(title='카드 & 보석', color=random.choice(colors))
     page2.add_field(name=f'`[{gem_check(char_gem_1.text)}]` : {char_gem_1_name.text}\n'
@@ -1397,15 +1414,17 @@ async def 프로필(ctx, name):
                     + f'`[{gem_check(char_gem_11.text)}]` : {char_gem_11_name.text}\n'
                     ,value=f'ㅤ', inline=True)
     page2.add_field(name=f'`[장착 카드]` : {char_card}',value=f'ㅤ', inline=False)
+    page3 = discord.Embed(title='장착 각인', color=random.choice(colors))
+    page3.add_field(name=f'`{char_active_1}`\n`{char_active_2}`',value=f'ㅤ', inline=False)
 
-
-    pages = [page0,page1,page2]
+    pages = [page0,page1,page2,page3]
 
     message = await ctx.send(embed=page0)
 
     await message.add_reaction('💡')
     await message.add_reaction('⚔️')
     await message.add_reaction('💎')
+    await message.add_reaction('📖')
 
     def check(reaction, user):
         return user == ctx.author
@@ -1423,6 +1442,9 @@ async def 프로필(ctx, name):
         elif str(reaction) == '💎':
             i = 2
             await message.edit(embed=pages[i])
+        elif str(reaction) == '📖':
+            i = 3
+            await message.edit(embed=pages[i])
 
         try:
             reaction, user = await bot.wait_for('reaction_add', timeout=600, check=check)
@@ -1434,7 +1456,6 @@ async def 프로필(ctx, name):
 
     driver.quit()
     
-
 # -------------------------------------------------------------------------------------- 운세
 @bot.command()
 async def 운세(ctx,date):
