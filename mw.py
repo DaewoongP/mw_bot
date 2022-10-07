@@ -1449,7 +1449,7 @@ async def 프로필(ctx, name):
             await message.edit(embed=pages[i])
 
         try:
-            reaction, user = await bot.wait_for('reaction_add', timeout=600, check=check)
+            reaction, user = await bot.wait_for('reaction_add', timeout=300, check=check)
             await message.remove_reaction(reaction, user)
         except:
             break
