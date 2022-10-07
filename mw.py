@@ -1166,13 +1166,15 @@ async def 프로필(ctx, name):
     #char_active_4 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[4]/span')
     #char_active_5 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[5]/span')
     #char_active_6 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]/li[6]/span')
-    char_active = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]')
-    #await ctx.send(char_active.text)
-    char_active_1 = char_active.text
+    target = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[2]/div[3]')
+    active_1 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[1]')
+    #await ctx.send(active_1.text)
+    char_active_1 = active_1.text #문제
     target = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[2]/div[3]').click()
-    char_active = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[2]')
+    active_2 = driver.find_element("xpath",'//*[@id="profile-ability"]/div[4]/div/div[1]/ul[2]')
     #await ctx.send(char_active.text)
-    char_active_2 = char_active.text
+    char_active_2 = active_2.text
+
     '''# 악세는 안하는게 나을듯?
     target = driver.find_element("xpath",'//*[@id="profile-equipment"]/div[2]/div[7]')
     ActionChains(driver).move_to_element(target).perform()
@@ -1455,7 +1457,7 @@ async def 프로필(ctx, name):
     await message.clear_reactions()
 
     driver.quit()
-    
+
 # -------------------------------------------------------------------------------------- 운세
 @bot.command()
 async def 운세(ctx,date):
