@@ -968,6 +968,13 @@ async def 자투리(ctx):  # 자투리 링크버튼
                     style=ButtonType().Link,  # Primary , Success, Secondary, Danger, Link
                     url='https://youtu.be/10iFkjompu8'
                 )
+            ]),
+            ActionRow([
+                Button(
+                    label='11. 뭉치면 죽고 떨어지면 산다',
+                    style=ButtonType().Link,  # Primary , Success, Secondary, Danger, Link
+                    url='https://youtu.be/Oa7anGhvH94'
+                )
             ])
         ]
     )
@@ -980,7 +987,7 @@ async def 자투리(ctx):  # 자투리 링크버튼
 # 자투리 5 => https://www.youtube.com/watch?v=Ul-MsgA_sdM
 # 자투리 6 => https://www.youtube.com/watch?v=B_WNJzW7sTM
 # 자투리 7 => https://youtu.be/10iFkjompu8
-
+# 자투리 11 => https://youtu.be/Oa7anGhvH94
 
 # ----------------------------------------------------------------------------------------- 프로필
 @bot.command()
