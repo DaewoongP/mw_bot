@@ -1609,7 +1609,7 @@ class search_char(nextcord.ui.Modal):
 @bot.slash_command(
     name="프로필",
     description="로스트아크 프로필 검색",
-    guild_ids=[957373143406755840],
+    guild_ids=[323766857708470272],
 )
 async def send(interaction: nextcord.Interaction):
     # sending the modal on an interaction (can be slash, buttons, or select menus)
