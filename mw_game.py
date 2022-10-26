@@ -133,8 +133,7 @@ class search_char(nextcord.ui.Modal):
         options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
         char_name = self.name.value
         url = 'https://iloa.gg/character/' + char_name
-        msg = await interaction.channel.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니당')
-        
+        msg = await interaction.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니당')
         
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
         driver.implicitly_wait(5)
