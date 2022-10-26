@@ -88,47 +88,18 @@ async def test(ctx):
 
     await ctx.send(view = view)
 
-#------------------------------------------------------------------
 
-@bot.command()
-async def 프로필(ctx, char_name):
-    user = ctx.message.author.nick
-    id = ctx.message.author.id  # id 가져오기
-    if user == None:
-        user = ctx.message.author.name
 
-    # 옵션 생성
-    options = webdriver.ChromeOptions()
-    # 창 숨기는 옵션 추가
-    options.add_argument("headless")
-    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
-    url = 'https://iloa.gg/character/' + char_name
-
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-    driver.get(url)
-    try:
-        await ctx.send(f'`{char_name}` 캐릭터 검색을 시작합니다.')
-        driver.implicitly_wait(5)
-        # 스샷 (기본창)
-        #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
-        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
-        driver.implicitly_wait(5)
-        char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
-        char_all_1.screenshot('screen_all_1.png')
- 
-        # 이미지 확대 
-        '''
-        img_char = cv2.imread('screen_all_1.png')
-        img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
-        cv2.imwrite('screen_all_1.png', img_2x)
-        '''
-        # 이미지 출력 부
-        with open('screen_all_1.png', 'rb') as f:
-            picture = discord.File(f)
-            await ctx.send(file=picture)
-
-    except:
-        await ctx.send("재검색 필요")
+@bot.slash_command(
+    name="테스트",
+    description="테스트중",
+    guild_ids=[957373143406755840],
+)
+async def 테스트(ctx):
+    view = discord.ui.View()
+    item = discord.ui.Button(style=discord.ButtonStyle.blurple, label="Click Me")
+    view.add_item(item=item)
+    await ctx.send("This message has a button!", view=view)
 
 # ---------------------------------------------------------------- modal test
 class search_char(nextcord.ui.Modal):
@@ -137,7 +108,7 @@ class search_char(nextcord.ui.Modal):
 
         # Create a text input and add it to the modal
         self.name = nextcord.ui.TextInput(
-            label="프로필 검색",
+            label="프로필 검색 (오류뜨면 전송 한번 더눌러주세요!)",
             placeholder="검색할 닉네임을 입력해주세요!",
             min_length=2,
             max_length=12,
@@ -155,39 +126,114 @@ class search_char(nextcord.ui.Modal):
         self.add_item(self.description)
         '''
     async def callback(self, interaction: nextcord.Interaction) -> None:
+
+        
         #This is the function that gets called when the submit button is pressed
-            # 옵션 생성
+        # 옵션 생성
         options = webdriver.ChromeOptions()
         # 창 숨기는 옵션 추가
         options.add_argument("headless")
         options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
         char_name = self.name.value
         url = 'https://iloa.gg/character/' + char_name
-
+        msg = await interaction.channel.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니당')
+        
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+        driver.implicitly_wait(5)
         driver.get(url)
-        try:
-            driver.implicitly_wait(5)
-            # 스샷 (기본창)
-            #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
-            driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
-            driver.implicitly_wait(5)
-            char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
-            char_all_1.screenshot('screen_all_1.png')
-    
-            # 이미지 확대 
-            '''
-            img_char = cv2.imread('screen_all_1.png')
-            img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
-            cv2.imwrite('screen_all_1.png', img_2x)
-            '''
-            # 이미지 출력 부
-            with open('screen_all_1.png', 'rb') as f:
-                picture = discord.File(f)
-                await interaction.send(file=picture)
+        
+        # 원정대 캐릭터 확인
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[4]/div[2]/div[1]/span[5]').click()
+        time.sleep(2)
+        char_all_3 = driver.find_element("xpath",'//*[@id="test"]')
+        char_all_3.screenshot('screen_all_3.png')
 
-        except:
-            await interaction.send("재검색 필요")
+        # 스샷 (기본창)
+        #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
+        driver.implicitly_wait(5)
+        time.sleep(2)
+        # 끌부분 클릭
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[4]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[5]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[6]/label/span').click()
+        char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
+        char_all_1.screenshot('screen_all_1.png')
+        # 꺼져있던부분 클릭
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[4]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[5]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[6]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[7]/label/span').click()
+        # 원래부분 삭제
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[1]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[2]/label/span').click()
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[3]/label/span').click()
+        time.sleep(2)
+        char_all_2 = driver.find_element("xpath",'//*[@id="screenshot"]')
+        char_all_2.screenshot('screen_all_2.png')
+
+        driver.quit()
+
+        # 이미지 확대 
+        '''
+        img_char = cv2.imread('screen_all_1.png')
+        img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
+        cv2.imwrite('screen_all_2.png', img_2x)
+        '''
+        class ViewWithButton(discord.ui.View):
+            @discord.ui.button(style=discord.ButtonStyle.blurple, label='1')
+            async def button_1(self, button: discord.ui.Button, interaction: discord.Interaction):
+                with open('screen_all_1.png', 'rb') as f:
+                    picture = discord.File(f)
+                    await msg.edit(file=picture)
+            @discord.ui.button(style=discord.ButtonStyle.blurple, label='2')
+            async def button_2(self, button: discord.ui.Button, interaction: discord.Interaction):
+                with open('screen_all_2.png', 'rb') as f:
+                    picture = discord.File(f)
+                    await msg.edit(file=picture)
+
+            @discord.ui.button(style=discord.ButtonStyle.blurple, label='3')
+            async def button_3(self, button: discord.ui.Button, interaction: discord.Interaction):
+                with open('screen_all_3.png', 'rb') as f:
+                    picture = discord.File(f)
+                    await msg.edit(file=picture)
+                '''
+                select = Select(
+                    placeholder= "원정대 내 캐릭터를 선택할 수 있어요!",
+                    options=[
+                    discord.SelectOption(
+                        label="1", 
+                        emoji="🎉", 
+                        description = "test.1",
+                        #default=True # 가장 처음에 표시되는 값 설정 가능.
+                    ),
+                    discord.SelectOption(
+                        label="2", 
+                        emoji="🎮", 
+                        description = "test.2")
+                ])
+                
+
+                async def my_callback(interaction):
+                    #await interaction.response.send_message(f"테스트성공 {select.values}")
+                    await char_msg.edit(view = ViewWithButton())
+
+                select.callback = my_callback # 콜백 설정
+                view = View()
+                view.add_item(select)
+
+                char_msg = await interaction.send(view = view)
+                '''
+
+
+        # 이미지 출력 부
+        with open('screen_all_1.png', 'rb') as f:
+            picture = discord.File(f)
+            await msg.edit(file=picture, view = ViewWithButton())
+
+        await asyncio.sleep(120)
+        await msg.delete()
+        
 
 @bot.slash_command(
     name="프로필",
@@ -198,6 +244,8 @@ async def send(interaction: nextcord.Interaction):
     # sending the modal on an interaction (can be slash, buttons, or select menus)
     modal = search_char()
     await interaction.response.send_modal(modal)
+    
+
 
 #------------------------------------------------------------------
 
