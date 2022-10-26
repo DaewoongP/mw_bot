@@ -1,11 +1,20 @@
 import asyncio, discord
+from msilib.schema import Component
+from logging import PlaceHolder
 from email.policy import default
 import random
+import interactions
 import numpy as np
 import time
 from discord.ui import Select, View
 from discord.ext import commands
 from discord_buttons_plugin import *
+
+# pip install discord-py-interactions
+from interactions import Modal, TextInput, TextStyleType, Button, CommandContext, ComponentContext
+# pip install nextcord
+from nextcord.ext import commands
+import nextcord
 
 
 # selenium
@@ -79,16 +88,116 @@ async def test(ctx):
 
     await ctx.send(view = view)
 
+#------------------------------------------------------------------
+
+@bot.command()
+async def 프로필(ctx, char_name):
+    user = ctx.message.author.nick
+    id = ctx.message.author.id  # id 가져오기
+    if user == None:
+        user = ctx.message.author.name
+
+    # 옵션 생성
+    options = webdriver.ChromeOptions()
+    # 창 숨기는 옵션 추가
+    options.add_argument("headless")
+    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+    url = 'https://iloa.gg/character/' + char_name
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+    driver.get(url)
+    try:
+        await ctx.send(f'`{char_name}` 캐릭터 검색을 시작합니다.')
+        driver.implicitly_wait(5)
+        # 스샷 (기본창)
+        #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
+        driver.implicitly_wait(5)
+        char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
+        char_all_1.screenshot('screen_all_1.png')
+ 
+        # 이미지 확대 
+        '''
+        img_char = cv2.imread('screen_all_1.png')
+        img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
+        cv2.imwrite('screen_all_1.png', img_2x)
+        '''
+        # 이미지 출력 부
+        with open('screen_all_1.png', 'rb') as f:
+            picture = discord.File(f)
+            await ctx.send(file=picture)
+
+    except:
+        await ctx.send("재검색 필요")
+
+# ---------------------------------------------------------------- modal test
+class search_char(nextcord.ui.Modal):
+    def __init__(self):
+        super().__init__("프로필")  # Modal title
+
+        # Create a text input and add it to the modal
+        self.name = nextcord.ui.TextInput(
+            label="프로필 검색",
+            placeholder="검색할 닉네임을 입력해주세요!",
+            min_length=2,
+            max_length=12,
+        )
+        self.add_item(self.name)
+        '''
+        # Create a long text input and add it to the modal
+        self.description = nextcord.ui.TextInput(
+            label="Description",
+            style=nextcord.TextInputStyle.paragraph,
+            placeholder="Information that can help us recognise your pet",
+            required=False,
+            max_length=1800,
+        )
+        self.add_item(self.description)
+        '''
+    async def callback(self, interaction: nextcord.Interaction) -> None:
+        #This is the function that gets called when the submit button is pressed
+            # 옵션 생성
+        options = webdriver.ChromeOptions()
+        # 창 숨기는 옵션 추가
+        options.add_argument("headless")
+        options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+        char_name = self.name.value
+        url = 'https://iloa.gg/character/' + char_name
+
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+        driver.get(url)
+        try:
+            driver.implicitly_wait(5)
+            # 스샷 (기본창)
+            #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
+            driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
+            driver.implicitly_wait(5)
+            char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
+            char_all_1.screenshot('screen_all_1.png')
     
+            # 이미지 확대 
+            '''
+            img_char = cv2.imread('screen_all_1.png')
+            img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
+            cv2.imwrite('screen_all_1.png', img_2x)
+            '''
+            # 이미지 출력 부
+            with open('screen_all_1.png', 'rb') as f:
+                picture = discord.File(f)
+                await interaction.send(file=picture)
 
+        except:
+            await interaction.send("재검색 필요")
 
-
-
-
-
-
-
-
+@bot.slash_command(
+    name="프로필",
+    description="로스트아크 프로필 검색",
+    guild_ids=[957373143406755840],
+)
+async def send(interaction: nextcord.Interaction):
+    # sending the modal on an interaction (can be slash, buttons, or select menus)
+    modal = search_char()
+    await interaction.response.send_modal(modal)
 
 #------------------------------------------------------------------
 

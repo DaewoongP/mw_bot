@@ -1464,7 +1464,47 @@ async def 프로필(ctx, name):
     await message.clear_reactions()
 
     driver.quit()
+# -------------------------------------------------------------------
+#약테스트
+@bot.command()
+async def 테스트(ctx, char_name):
+    user = ctx.message.author.nick
+    id = ctx.message.author.id  # id 가져오기
+    if user == None:
+        user = ctx.message.author.name
 
+    # 옵션 생성
+    options = webdriver.ChromeOptions()
+    # 창 숨기는 옵션 추가
+    options.add_argument("headless")
+    options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
+    url = 'https://iloa.gg/character/' + char_name
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+    driver.get(url)
+    try:
+        await ctx.send(f'`{char_name}` 캐릭터 검색을 시작합니다.')
+        driver.implicitly_wait(5)
+        # 스샷 (기본창)
+        #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
+        driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
+        driver.implicitly_wait(5)
+        char_all_1 = driver.find_element("xpath",'//*[@id="screenshot"]')
+        char_all_1.screenshot('screen_all_1.png')
+ 
+        # 이미지 확대 
+        '''
+        img_char = cv2.imread('screen_all_1.png')
+        img_2x = cv2.resize(img_char, None, fx=1.35, fy=1, interpolation = cv2.INTER_CUBIC)
+        cv2.imwrite('screen_all_1.png', img_2x)
+        '''
+        # 이미지 출력 부
+        with open('screen_all_1.png', 'rb') as f:
+            picture = discord.File(f)
+            await ctx.send(file=picture)
+
+    except:
+        await ctx.send("재검색 필요")
 # -------------------------------------------------------------------------------------- 운세
 @bot.command()
 async def 운세(ctx,date):
