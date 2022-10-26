@@ -96,10 +96,7 @@ async def test(ctx):
     guild_ids=[957373143406755840],
 )
 async def 테스트(ctx):
-    view = discord.ui.View()
-    item = discord.ui.Button(style=discord.ButtonStyle.blurple, label="Click Me")
-    view.add_item(item=item)
-    await ctx.send("This message has a button!", view=view)
+    pass
 
 # ---------------------------------------------------------------- modal test
 class search_char(nextcord.ui.Modal):
@@ -138,10 +135,12 @@ class search_char(nextcord.ui.Modal):
         url = 'https://iloa.gg/character/' + char_name
         msg = await interaction.channel.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니당')
         
+        
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
         driver.implicitly_wait(5)
         driver.get(url)
         
+    
         # 원정대 캐릭터 확인
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[4]/div[2]/div[1]/span[5]').click()
         time.sleep(2)
@@ -234,6 +233,7 @@ class search_char(nextcord.ui.Modal):
         await asyncio.sleep(120)
         await msg.delete()
         
+
 
 @bot.slash_command(
     name="프로필",
