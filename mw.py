@@ -5,7 +5,7 @@ import numpy as np
 import time
 import re
 # from discord.ui import Button, View
-from discord.ext import commands
+#from discord.ext import commands
 from discord_buttons_plugin import *
 
 # selenium
@@ -20,6 +20,7 @@ from interactions import Modal, TextInput, TextStyleType, Button, CommandContext
 from nextcord.ext import commands
 import nextcord
 
+import cv2
 
 event = []
 event_id = []
@@ -213,13 +214,17 @@ async def 이모티콘(ctx):
     await ctx.send('**이모티콘 목록 클릭하면 잘보입니다.**')
     await ctx.send('https://cdn.discordapp.com/attachments/957612748978683914/958425378517553222/unknown.png')
 
-
-@bot.command()
+@bot.slash_command(
+    name="패치노트",
+    description="머웅 봇 패치노트",
+    guild_ids=[323766857708470272],
+)
 async def 패치노트(ctx):
     embed = discord.Embed(title='📖 머웅 봇 v3.0 패치노트', color=random.choice(colors))
     # 📕📘📙📗
     embed.add_field(name='📕 1. `!프로필` 베타버전', value='`추가 작업 중`', inline=False)
     embed.add_field(name='📘 2. `!강화`', value='`에스더 강화 패치 추가 하락확률 = 강화확률`', inline=False)
+    embed.add_field(name='📙 3. `/`', value='`채팅창에 / 눌렀을때 기능 추가중`', inline=False)
     await ctx.send(embed=embed)
 
 @bot.command()
@@ -1505,7 +1510,7 @@ class search_char(nextcord.ui.Modal):
         options.add_argument("window-size=2560x9999") # 세로를 9999로 설정 (headless 모드에서만 작동함)
         char_name = self.name.value
         url = 'https://iloa.gg/character/' + char_name
-        msg = await interaction.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니당')
+        msg = await interaction.send(f'`{char_name}` 캐릭터 검색을 시작합니다.\n 10초 정도 걸릴 수 있습니다\n 프로필은 2분뒤 삭제됩니다.')
         
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
         driver.implicitly_wait(5)
@@ -1514,7 +1519,7 @@ class search_char(nextcord.ui.Modal):
     
         # 원정대 캐릭터 확인
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[4]/div[2]/div[1]/span[5]').click()
-        time.sleep(2)
+        time.sleep(3)
         char_all_3 = driver.find_element("xpath",'//*[@id="test"]')
         char_all_3.screenshot('screen_all_3.png')
 
@@ -1522,7 +1527,7 @@ class search_char(nextcord.ui.Modal):
         #char_all_1 = driver.find_element("xpath",'//*[@id="__next"]/div/main/div')
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[3]/div/div[1]/div/div[3]/span').click()
         driver.implicitly_wait(5)
-        time.sleep(2)
+        time.sleep(3)
         # 끌부분 클릭
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[4]/label/span').click()
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[5]/label/span').click()
@@ -1538,12 +1543,14 @@ class search_char(nextcord.ui.Modal):
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[1]/label/span').click()
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[2]/label/span').click()
         driver.find_element("xpath",'//*[@id="__next"]/div/main/div/div/div[2]/div/div/div[1]/div[1]/div[3]/label/span').click()
-        time.sleep(2)
+        time.sleep(3)
         char_all_2 = driver.find_element("xpath",'//*[@id="screenshot"]')
         char_all_2.screenshot('screen_all_2.png')
 
         driver.quit()
-
+        img_char = cv2.imread('screen_all_2.png')
+        img_2 = img_char[340:1480, 0:640].copy()
+        cv2.imwrite('screen_all_2.png', img_2)
         # 이미지 확대 
         '''
         img_char = cv2.imread('screen_all_1.png')
@@ -1604,8 +1611,6 @@ class search_char(nextcord.ui.Modal):
         await asyncio.sleep(120)
         await msg.delete()
         
-
-
 @bot.slash_command(
     name="프로필",
     description="로스트아크 프로필 검색",

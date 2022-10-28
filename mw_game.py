@@ -186,6 +186,9 @@ class search_char(nextcord.ui.Modal):
                     await msg.edit(file=picture)
             @discord.ui.button(style=discord.ButtonStyle.blurple, label='2')
             async def button_2(self, button: discord.ui.Button, interaction: discord.Interaction):
+                img_char = cv2.imread('screen_all_2.png')
+                img_2 = img_char[340:1480, 0:640].copy()
+                cv2.imwrite('screen_all_2.png', img_2)
                 with open('screen_all_2.png', 'rb') as f:
                     picture = discord.File(f)
                     await msg.edit(file=picture)
