@@ -17,9 +17,6 @@ namespace mw
 	typedef		signed long				_long;
 	typedef		unsigned long			_ulong;
 
-	typedef		int64_t					_tint;
-	typedef		uint64_t				_tuint;
-
 	typedef		float					_float;
 	typedef		double					_double;
 

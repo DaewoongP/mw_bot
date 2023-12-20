@@ -5,22 +5,22 @@ BEGIN(mw)
 
 class CMainBot
 {
-private:
-	explicit CMainBot() = default;
+public:
+	explicit CMainBot();
 	virtual ~CMainBot() = default;
 
 public:
 	HRESULT Initialize(const _char* pTokenPath);
 
 private:
-	string			m_szToken = "";
-	_tint			m_iGuildID = { -1 };
+	string			m_szToken;
+	_int			m_iGuildID;
 
 private:
 	_bool isValid();
 
 public:
-	static CMainApp* Create(const _char* pTokenPath);
+	static CMainBot* Create(const _char* pTokenPath);
 };
 
 END

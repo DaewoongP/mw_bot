@@ -23,6 +23,8 @@ namespace mw
 namespace fs = std::filesystem;
 
 #include "Macros.h"
+#include "Fuctions.h"
+#include "Typedef.h"
 
 using namespace mw;
 using namespace std;
