@@ -1,4 +1,5 @@
-def init(client):
+
+def init(client, discord):
     @client.event
     async def on_ready():
         print(f'로그인 : {client.user}')
@@ -8,5 +9,6 @@ def init(client):
         if message.author == client.user:
             return
 
-        if message.content.startswith('$hello'):
-            await message.channel.send('Hello!')
+    @client.hybrid_command(name="ping", with_app_command=True, description="testing~")
+    async def ping(ctx):
+        await ctx.send("123")
