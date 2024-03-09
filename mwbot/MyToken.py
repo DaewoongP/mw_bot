@@ -1,3 +1,4 @@
+# Discord Bot Token Management
 class CToken:
     def __init__(self):
         token_file = open("../Token.txt", 'r')

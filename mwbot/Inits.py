@@ -1,14 +1,13 @@
-
-def init(client, discord):
+# init... don't use return
+def init(client, commands):
     @client.event
     async def on_ready():
         print(f'로그인 : {client.user}')
 
     @client.event
     async def on_message(message):
-        if message.author == client.user:
-            return
+        await client.process_commands(message)
 
-    @client.hybrid_command(name="ping", with_app_command=True, description="testing~")
-    async def ping(ctx):
-        await ctx.send("123")
+    @client.event
+    async def on_command_error(ctx, error):
+        print(f"[{ctx.name}({ctx.author})] -> 에러작성 : \'{error}\'")

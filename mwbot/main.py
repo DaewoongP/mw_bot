@@ -2,6 +2,7 @@ import discord
 import MyToken
 import Inits
 import Lostark
+import Lostark_Command
 from discord.ext import commands
 
 
@@ -10,21 +11,21 @@ class CMain:
         # token
         self.tokens = MyToken.CToken()
         # init
-        self.intents = discord.Intents.default()
-        self.intents.message_content = True
-        self._client = commands.Bot(command_prefix="!", intents=self.intents)
-        # discord.Client(command_prefix='!', intents=self.intents.all())
+        intents = discord.Intents.default()
+        intents.message_content = True
+        self._client = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-        Inits.init(self._client, discord)
-        _lostark = Lostark.CLostark(self.tokens.m_LostarkToken)
+        Inits.init(self._client, commands)
 
-        @self._client.hybrid_command(name="공지", with_app_command=True, description="로아 공지")
-        async def command_notice(ctx):
-            await ctx.send(_lostark.get_notice())
+        self._lostark = Lostark.CLostark(self.tokens.m_LostarkToken)
+
+    def start(self):
+        Lostark_Command.start(self._client, self._lostark, commands)
 
     def run(self):
         self._client.run(self.tokens.m_DiscordToken)
 
 
 main = CMain()
+main.start()
 main.run()
