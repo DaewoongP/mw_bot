@@ -27,7 +27,7 @@ def start(client, lostark, commands, discord):
             title="군장검사",
             color=All.random.choice(All.colors)
         )
-
+        embed.set_footer(text=f"검색자 : {ctx.author.display_name}", icon_url=ctx.author.avatar.url)
 
         sibling_list = lostark.find_siblings(character_name=character_name)
         sibling_max_level = 0
@@ -51,8 +51,6 @@ def start(client, lostark, commands, discord):
         embed.add_field(name="칭호", value=f"{profile_list.get("Title")}", inline=True)
         embed.add_field(name="클래스", value=f"{profile_list.get("CharacterClassName")}", inline=True)
         embed.add_field(name="캐릭터 레벨", value=f"{profile_list.get("CharacterLevel")}", inline=True)
-
-        embed.set_footer(text=f"검색자 : {ctx.author.display_name}", icon_url=f"{profile_list.get("CharacterImage")}")
 
         # 보석
         gem_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.gems)
