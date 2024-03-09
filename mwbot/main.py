@@ -15,12 +15,12 @@ class CMain:
         intents.message_content = True
         self._client = commands.Bot(command_prefix="!", intents=intents, help_command=None)
 
-        Inits.init(self._client, commands)
+        Inits.init(client=self._client, commands=commands)
 
-        self._lostark = Lostark.CLostark(self.tokens.m_LostarkToken)
+        self._lostark = Lostark.CLostark(token=self.tokens.m_LostarkToken)
 
     def start(self):
-        Lostark_Command.start(self._client, self._lostark, commands)
+        Lostark_Command.start(client=self._client, lostark=self._lostark, commands=commands, discord=discord)
 
     def run(self):
         self._client.run(self.tokens.m_DiscordToken)

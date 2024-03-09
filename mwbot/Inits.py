@@ -10,4 +10,5 @@ def init(client, commands):
 
     @client.event
     async def on_command_error(ctx, error):
-        print(f"[{ctx.name}({ctx.author})] -> 에러작성 : \'{error}\'")
+        print(f"[{ctx.author.display_name}({ctx.author})] -> 에러작성 : \'{error}\'")
+        # await ctx.send(f"그런 명령어는 없어용 ㅋ")
