@@ -1,4 +1,6 @@
 import requests
+import re
+import All
 
 
 class CCharacter_Filter:
@@ -73,3 +75,28 @@ class CLostark:
 
     def get_character_filter(self):
         return self.character_filter
+
+    def find_transcendence(self, data, target_str):
+        count = 0
+        for key, value in data.items():
+            if isinstance(value, dict):
+                count += self.find_transcendence(value, target_str)
+            elif isinstance(value, str) and target_str in value:
+                match = re.search(r"(\d+)개", value)
+                if match:
+                    count += int(match.group(1))
+        return count
+
+    def find_elixir(self, data):
+        for key, value in data.items():
+            if isinstance(value, dict):
+                result = self.find_elixir(value)
+                if result is not None:
+                    return result
+            elif isinstance(value, str):
+                for target_str in All.elixir_list:
+                    if target_str in value:
+                        match = re.search(r"({}) \((\d+)단계\)".format(target_str), value)
+                        if match:
+                            return target_str, match.group(2)
+        return None

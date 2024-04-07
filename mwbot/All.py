@@ -7,6 +7,7 @@ colors = [0xFFEEEE, 0xFFF2EE, 0xFFF7EE, 0xFFFBEE, 0xFFFFEE, 0xFBFFEE, 0xF7FFEE, 
           0xFFFFC4, 0xF0FFC4, 0xE1FFC4, 0xD2FFC4, 0xC4FFC4, 0xC4FFD2, 0xC4FFE1, 0xC4FFF0, 0xC4FFFF, 0xC4F0FF,
           0xC4E1FF, 0xC4D2FF, 0xC4C4FF, 0xD2C4FF, 0xE1C4FF, 0xF0C4FF, 0xFFC4FF, 0xFFC4F0, 0xFFC4E1]
 
+
 def change_name(name):
     if name == "그꿈덧":
         return "그꿈을덧그리며"
@@ -18,4 +19,9 @@ def change_name(name):
         return "바리"
     if name == "라펙트":
         return "LastEffect"
+    if name == "전창술":
+        return "전창술사에용"
     return name
+
+
+elixir_list = ["강맹", "달인", "선각자", "선봉대", "신념", "진군", "칼날 방패", "행운", "회심"]

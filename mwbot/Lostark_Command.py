@@ -1,5 +1,4 @@
 import All
-import re
 import json
 
 
@@ -17,20 +16,21 @@ def start(client, lostark, commands, discord):
         await ctx.send(embed=embed)
         # 보낸 메세지를 삭제하는 기능.
         await ctx.message.delete()
-        
+
     # 간단한 군장 검사
     @client.hybrid_command(name="군장검사", with_app_command=True, description="캐릭터의 간단한 정보를 표시해줍니다.")
     async def command_check_spec(ctx: commands.Context, character_name):
         character_name = All.change_name(character_name)
         # 임베드 생성
         embed = discord.Embed(
-            title="군장검사",
+            title=f"{character_name}",
             color=All.random.choice(All.colors)
         )
         embed.set_footer(text=f"검색자 : {ctx.author.display_name}", icon_url=ctx.author.avatar.url)
 
         sibling_list = lostark.find_siblings(character_name=character_name)
         sibling_max_level = 0
+        max_level_character_in_sibling = ""
         for character_arr in sibling_list:
             # 문자열 처리
             characters_to_remove = "',"
@@ -44,13 +44,19 @@ def start(client, lostark, commands, discord):
 
         profile_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.profiles)
 
-        embed.add_field(name="이름", value=f"{character_name}", inline=True)
+        # embed.add_field(name="이름", value=f"{character_name}", inline=True)
         embed.add_field(name="아이템 레벨", value=f"{profile_list.get("ItemMaxLevel")}", inline=True)
         embed.add_field(name="원정대 레벨", value=f"{profile_list.get("ExpeditionLevel")}", inline=True)
+        embed.add_field(name="캐릭터 레벨", value=f"{profile_list.get("CharacterLevel")}", inline=True)
 
         embed.add_field(name="칭호", value=f"{profile_list.get("Title")}", inline=True)
         embed.add_field(name="클래스", value=f"{profile_list.get("CharacterClassName")}", inline=True)
-        embed.add_field(name="캐릭터 레벨", value=f"{profile_list.get("CharacterLevel")}", inline=True)
+        # 카드
+        card_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.cards)
+        for effect in card_list.get("Effects"):
+            for item in effect.get("Items"):
+                if item.get("Name") == "세상을 구하는 빛 6세트 (30각성합계)":
+                    embed.add_field(name="카드", value=f"세구 30각", inline=True)
 
         # 보석
         gem_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.gems)
@@ -73,25 +79,32 @@ def start(client, lostark, commands, discord):
         # 장비 예외처리 필요, 모든 장비 순회 필요
         equipment_list = lostark.find_character(character_name=character_name,
                                                 filter=lostark.character_filter.equipment)
-        transcendence_sentence = json.loads(equipment_list[4]["Tooltip"])["Element_009"]["value"]["Element_000"]["contentStr"]["Element_001"]["contentStr"]
-        find_transcendence_num = re.search(r"(\d+)개", transcendence_sentence)
 
-        if find_transcendence_num:
-            embed.add_field(name="초월", value=f"{find_transcendence_num.group(1)}개", inline=True)
-        else:
-            print(f"{transcendence_sentence}")
-            print(f"error : {find_transcendence_num}")
-            print("초월 단계 없음")
+        transcendence_num = 0
+        elixir_list = tuple()
+        for equip in equipment_list:
+            # if equip['Type'] == "무기":
+            #     pass
+            if equip['Type'] == "투구":
+                json_equip_data = json.loads(equip['Tooltip'])
+                transcendence_num = lostark.find_transcendence(json_equip_data, "모든 방어구에 적용된 총")
+                elixir_list = lostark.find_elixir(json_equip_data)
+                break
+            # if equip['Type'] == "상의":
+            #     pass
+            # if equip['Type'] == "하의":
+            #     pass
+            # if equip['Type'] == "장갑":
+            #     pass
+            # if equip['Type'] == "어깨":
+            #     pass
 
         # 엘릭서
-        embed.add_field(name="엘릭서", value=f"공사중", inline=True)
+        # 레벨 제한 필요
+        embed.add_field(name="엘릭서", value=f"{elixir_list[0]} : {elixir_list[1]}단계", inline=True)
 
-        # 카드
-        card_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.cards)
-        for effect in card_list.get("Effects"):
-            for item in effect.get("Items"):
-                if item.get("Name") == "세상을 구하는 빛 6세트 (30각성합계)":
-                    embed.add_field(name="카드", value=f"세구 30각", inline=False)
+        # 초월
+        embed.add_field(name="초월", value=f"{transcendence_num}개", inline=True)
 
         # 원정대 내 가장 높은 캐릭터 이름, 레벨
         embed.add_field(name="원정대 고렙 캐릭터", value=f"{max_level_character_in_sibling} / {sibling_max_level}", inline=False)
