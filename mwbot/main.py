@@ -1,8 +1,10 @@
 import discord
 import MyToken
 import Inits
+import Web
 import Lostark
 import Lostark_Command
+import FiveSecond
 from discord.ext import commands
 
 
@@ -21,6 +23,8 @@ class CMain:
 
     def start(self):
         Lostark_Command.start(client=self._client, lostark=self._lostark, commands=commands, discord=discord)
+        # Web.start(client=self._client, commands=commands)
+        FiveSecond.start(client=self._client, commands=commands, discord=discord)
 
     def run(self):
         self._client.run(self.tokens.m_DiscordToken)

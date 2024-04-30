@@ -45,12 +45,12 @@ def start(client, lostark, commands, discord):
         profile_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.profiles)
 
         # embed.add_field(name="이름", value=f"{character_name}", inline=True)
-        embed.add_field(name="아이템 레벨", value=f"{profile_list.get("ItemMaxLevel")}", inline=True)
-        embed.add_field(name="원정대 레벨", value=f"{profile_list.get("ExpeditionLevel")}", inline=True)
-        embed.add_field(name="캐릭터 레벨", value=f"{profile_list.get("CharacterLevel")}", inline=True)
+        embed.add_field(name="아이템 레벨", value=f"{profile_list.get('ItemMaxLevel')}", inline=True)
+        embed.add_field(name="원정대 레벨", value=f"{profile_list.get('ExpeditionLevel')}", inline=True)
+        embed.add_field(name="캐릭터 레벨", value=f"{profile_list.get('CharacterLevel')}", inline=True)
 
-        embed.add_field(name="칭호", value=f"{profile_list.get("Title")}", inline=True)
-        embed.add_field(name="클래스", value=f"{profile_list.get("CharacterClassName")}", inline=True)
+        embed.add_field(name="칭호", value=f"{profile_list.get('Title')}", inline=True)
+        embed.add_field(name="클래스", value=f"{profile_list.get('CharacterClassName')}", inline=True)
         # 카드
         card_list = lostark.find_character(character_name=character_name, filter=lostark.character_filter.cards)
         for effect in card_list.get("Effects"):
@@ -74,7 +74,7 @@ def start(client, lostark, commands, discord):
         if len(gem_levels) >= 4:
             embed.add_field(name="보석 최대렙 4개", value=f"{gem_levels[0], gem_levels[1], gem_levels[2], gem_levels[3]}", inline=True)
         embed.add_field(name="보석 평균 레벨", value=f"{round(average(gem_levels), 2)}", inline=True)
-        embed.add_field(name="보석 개수", value=f"{len(gem_list.get("Gems"))}", inline=True)
+        embed.add_field(name="보석 개수", value=f"{len(gem_list.get('Gems'))}", inline=True)
 
         # 장비 예외처리 필요, 모든 장비 순회 필요
         equipment_list = lostark.find_character(character_name=character_name,
