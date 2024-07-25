@@ -1,5 +1,5 @@
 #pragma once
-#include "Base.h"
+#include "AppInstance.h"
 #include "Client_Defines.h"
 
 BEGIN(Client)
@@ -7,21 +7,17 @@ BEGIN(Client)
 class CMainApp final : public CBase
 {
 private:
-	explicit CMainApp() = default;
+	explicit CMainApp();
 	virtual ~CMainApp() = default;
 
 public:
-	HRESULT Initialize(const _char* pTokenPath);
+	HRESULT Initialize(const string& strTokenPath);
 
 private:
-	string			m_szToken = "";
-	_tint			m_iGuildID = { -1 };
-
-private:
-	_bool isValid();
+	CAppInstance* m_pApp = nullptr;
 
 public:
-	static CMainApp* Create(const _char* pTokenPath);
+	static CMainApp* Create(const string& strTokenPath);
 	virtual void Free() override;
 };
 

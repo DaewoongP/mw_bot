@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -174,7 +174,11 @@ call Copy.bat</Command>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\public\AppInstance.h" />
     <ClInclude Include="..\public\Base.h" />
+    <ClInclude Include="..\public\Bot.h" />
+    <ClInclude Include="..\public\Command.h" />
+    <ClInclude Include="..\public\CommandManager.h" />
     <ClInclude Include="..\Public\dpp\dpp.h" />
     <ClInclude Include="..\Public\Engine_Defines.h" />
     <ClInclude Include="..\Public\Engine_Functions.h" />
@@ -183,7 +187,11 @@ call Copy.bat</Command>
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\private\AppInstance.cpp" />
     <ClCompile Include="..\private\Base.cpp" />
+    <ClCompile Include="..\private\Bot.cpp" />
+    <ClCompile Include="..\private\Command.cpp" />
+    <ClCompile Include="..\private\CommandManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

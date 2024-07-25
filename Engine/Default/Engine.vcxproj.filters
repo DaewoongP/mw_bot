@@ -10,6 +10,21 @@
     <Filter Include="97. Base">
       <UniqueIdentifier>{f22d2156-38ff-4ce6-b6e4-9a11674547e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00. AppInstance">
+      <UniqueIdentifier>{d8e947df-78ec-486b-93e8-4f091050a70c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Bot">
+      <UniqueIdentifier>{1c5ea717-9221-4b77-85f2-6755ba9e0144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Commnads">
+      <UniqueIdentifier>{76bba4ec-052a-4924-8f79-aa84678127db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Commnads\00. Command">
+      <UniqueIdentifier>{fe207dc1-1965-4d37-ba3e-18c175a15a95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Commnads\00. Command\Manager">
+      <UniqueIdentifier>{6392fec0-bcd6-4fda-b533-2440a8969081}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -33,10 +48,34 @@
     <ClInclude Include="..\Public\dpp\dpp.h">
       <Filter>98. Default</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\AppInstance.h">
+      <Filter>00. AppInstance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Bot.h">
+      <Filter>01. Bot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Command.h">
+      <Filter>02. Commnads\00. Command</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\CommandManager.h">
+      <Filter>02. Commnads\00. Command\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\Base.cpp">
       <Filter>97. Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\AppInstance.cpp">
+      <Filter>00. AppInstance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Bot.cpp">
+      <Filter>01. Bot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Command.cpp">
+      <Filter>02. Commnads\00. Command</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\CommandManager.cpp">
+      <Filter>02. Commnads\00. Command\Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

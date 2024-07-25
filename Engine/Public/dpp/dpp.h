@@ -43,6 +43,7 @@
 #include <dpp/role.h>
 #include <dpp/user.h>
 #include <dpp/channel.h>
+#include <dpp/thread.h>
 #include <dpp/guild.h>
 #include <dpp/invite.h>
 #include <dpp/dtemplate.h>
@@ -61,6 +62,8 @@
 #include <dpp/application.h>
 #include <dpp/scheduled_event.h>
 #include <dpp/discordclient.h>
+#include <dpp/dispatcher.h>
+#include <dpp/cluster.h>
 #include <dpp/cache.h>
 #include <dpp/httpsclient.h>
 #include <dpp/queues.h>
@@ -69,7 +72,5 @@
 #include <dpp/sync.h>
 #include <dpp/colors.h>
 #include <dpp/discordevents.h>
-#include <dpp/dispatcher.h>
-#include <dpp/cluster.h>
 #include <dpp/timed_listener.h>
 #include <dpp/collector.h>

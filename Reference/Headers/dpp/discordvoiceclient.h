@@ -38,7 +38,6 @@
 #include <dpp/dispatcher.h>
 #include <dpp/cluster.h>
 #include <dpp/discordevents.h>
-#include <dpp/isa_detection.h>
 #include <dpp/socket.h>
 #include <queue>
 #include <thread>
@@ -50,15 +49,20 @@
 #include <functional>
 #include <chrono>
 
-
-
 struct OpusDecoder;
 struct OpusEncoder;
 struct OpusRepacketizer;
 
 namespace dpp {
 
-using json = nlohmann::json;
+class audio_mixer;
+
+// !TODO: change these to constexpr and rename every occurrence across the codebase
+#define AUDIO_TRACK_MARKER (uint16_t)0xFFFF
+
+#define AUDIO_OVERLAP_SLEEP_SAMPLES 30
+
+inline constexpr size_t send_audio_raw_max_length = 11520;
 
 /*
 * @brief For holding a moving average of the number of current voice users, for applying a smooth gain ramp.
@@ -89,15 +93,12 @@ struct DPP_EXPORT voice_out_packet {
 	 * Generally these will be RTP.
 	 */
 	std::string packet;
+
 	/**
 	 * @brief Duration of packet
 	 */
 	uint64_t duration;
 };
-
-#define AUDIO_TRACK_MARKER (uint16_t)0xFFFF
-
-#define AUDIO_OVERLAP_SLEEP_SAMPLES 30
 
 /** @brief Implements a discord voice connection.
  * Each discord_voice_client connects to one voice channel and derives from a websocket client.
@@ -138,6 +139,11 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 	 * @brief Last connect time of voice session
 	 */
 	time_t connect_time;
+
+	/*
+	* @brief For mixing outgoing voice data.
+	*/
+	std::unique_ptr<audio_mixer> mixer;
 
 	/**
 	 * @brief IP of UDP/RTP endpoint
@@ -184,6 +190,7 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 		 * voice payload.
 		 */
 		rtp_seq_t seq;
+
 		/**
 		 * @brief The timestamp of the RTP packet that generated this voice
 		 * payload.
@@ -192,6 +199,7 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 		 * number wraps around.
 		 */
 		rtp_timestamp_t timestamp;
+
 		/**
 		 * @brief The event payload that voice handlers receive.
 		 */
@@ -221,6 +229,7 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 			rtp_seq_t min_seq, max_seq;
 			rtp_timestamp_t min_timestamp, max_timestamp;
 		} range;
+
 		/**
 		 * @brief The queue of parked voice payloads.
 		 * 
@@ -229,10 +238,12 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 		 * are parked and sorted in this queue.
 		 */
 		std::priority_queue<voice_payload> parked_payloads;
+
 		/**
 		 * @brief The decoder ctls to be set on the decoder.
 		 */
 		std::vector<std::function<void(OpusDecoder&)>> pending_decoder_ctls;
+
 		/**
 		 * @brief libopus decoder
 		 *
@@ -246,6 +257,7 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 	 * @brief Thread used to deliver incoming voice data to handlers.
 	 */
 	std::thread voice_courier;
+
 	/**
 	 * @brief Shared state between this voice client and the courier thread.
 	 */
@@ -254,16 +266,19 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 		 * @brief Protects all following members.
 		 */
 		std::mutex mtx;
+
 		/**
 		 * @brief Signaled when there is a new payload to deliver or terminating state has changed.
 		 */
 		std::condition_variable signal_iteration;
+
 		/**
 		 * @brief Voice buffers to be reported to handler, grouped by speaker.
 		 *
 		 * Buffers are parked here and flushed every 500ms.
 		 */
 		std::map<snowflake, voice_payload_parking_lot> parked_voice_payloads;
+
 		/**
 		 * @brief Used to signal termination.
 		 *
@@ -271,6 +286,7 @@ class DPP_EXPORT discord_voice_client : public websocket_client
 		 */
 		bool terminating = false;
 	} voice_courier_shared_state;
+
 	/**
 	 * @brief The run loop of the voice courier thread.
 	 */
@@ -548,7 +564,10 @@ public:
 	snowflake channel_id;
 
 	/**
-	 * @brief The audio type to be sent. The default type is recorded audio.
+	 * @brief The audio type to be sent.
+	 *
+	 * @note On Windows, the default type is overlap audio.
+	 * On all other platforms, it is recorded audio.
 	 *
 	 * If the audio is recorded, the sending of audio packets is throttled.
 	 * Otherwise, if the audio is live, the sending is not throttled.
@@ -578,10 +597,15 @@ public:
 	 */
 	enum send_audio_type_t
 	{
-	    satype_recorded_audio,
-	    satype_live_audio,
+		satype_recorded_audio,
+		satype_live_audio,
 		satype_overlap_audio
-	} send_audio_type = satype_recorded_audio;
+	} send_audio_type =
+#ifdef _WIN32
+	satype_overlap_audio;
+#else
+	satype_recorded_audio;
+#endif
 
 	/**
 	 * @brief Sets the gain for the specified user.
@@ -638,6 +662,13 @@ public:
 	 */
 	dpp::utility::uptime get_uptime();
 
+	/**
+	 * @brief The time (in milliseconds) between each interval when parsing audio.
+	 *
+	 * @warning You should only change this if you know what you're doing. It is set to 500ms by default.
+	 */
+	uint16_t iteration_interval{500};
+
 	/** Constructor takes shard id, max shards and token.
 	 * @param _cluster The cluster which owns this voice connection, for related logging, REST requests etc
 	 * @param _channel_id The channel id to identify the voice connection as
@@ -676,7 +707,7 @@ public:
 	/**
 	 * @brief Send raw audio to the voice channel.
 	 * 
-	 * You should send an audio packet of 11520 bytes.
+	 * You should send an audio packet of `send_audio_raw_max_length` (11520) bytes.
 	 * Note that this function can be costly as it has to opus encode
 	 * the PCM audio on the fly, and also encrypt it with libsodium.
 	 * 
@@ -685,18 +716,26 @@ public:
 	 * ready to send and know its length it is advisable to call this
 	 * method multiple times to enqueue the entire stream audio so that
 	 * it is all encoded at once (unless you have set use_opus to false).
-	 * Constantly calling this from the dpp::on_voice_buffer_send callback
-	 * can and will eat a TON of cpu!
+	 * **Constantly calling this from dpp::cluster::on_voice_buffer_send
+	 * can, and will, eat a TON of cpu!**
 	 * 
 	 * @param audio_data Raw PCM audio data. Channels are interleaved,
 	 * with each channel's amplitude being a 16 bit value.
 	 * 
-	 * The audio data should be 48000Hz signed 16 bit audio.
+	 * @warning **The audio data needs to be 48000Hz signed 16 bit audio, otherwise, the audio will come through incorrectly!**
 	 * 
 	 * @param length The length of the audio data. The length should
 	 * be a multiple of 4 (2x 16 bit stereo channels) with a maximum
-	 * length of 11520, which is a complete opus frame at highest
-	 * quality.
+	 * length of `send_audio_raw_max_length`, which is a complete opus
+	 * frame at highest quality.
+	 *
+	 * Generally when you're streaming and you know there will be
+	 * more packet to come you should always provide packet data with
+	 * length of `send_audio_raw_max_length`.
+	 * Silence packet will be appended if length is less than
+	 * `send_audio_raw_max_length` as discord expects to receive such
+	 * specific packet size. This can cause gaps in your stream resulting
+	 * in distorted audio if you have more packet to send later on.
 	 * 
 	 * @return discord_voice_client& Reference to self
 	 * 
@@ -819,6 +858,22 @@ public:
 	 * @return reference to self
 	 */
 	discord_voice_client& stop_audio();
+
+	/**
+	 * @brief Change the iteration interval time.
+	 *
+	 * @param interval The time (in milliseconds) between each interval when parsing audio.
+	 *
+	 * @return Reference to self.
+	 */
+	discord_voice_client& set_iteration_interval(uint16_t interval);
+
+	/**
+	 * @brief Get the iteration interval time (in milliseconds).
+	 *
+	 * @return iteration_interval
+	 */
+	uint16_t get_iteration_interval();
 
 	/**
 	 * @brief Returns true if we are playing audio

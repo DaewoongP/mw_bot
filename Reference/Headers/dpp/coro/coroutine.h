@@ -18,9 +18,19 @@
  * limitations under the License.
  *
  ************************************************************************************/
+#pragma once
+
+#include <dpp/utility.h>
+
+namespace dpp {
+
+struct coroutine_dummy {
+	int *handle_dummy = nullptr;
+};
+
+}
 
 #ifdef DPP_CORO
-#pragma once
 
 #include "coro.h"
 
@@ -41,14 +51,14 @@ struct promise_t;
 
 template <typename R>
 /**
-	* @brief Alias for the handle_t of a coroutine.
-	*/
+ * @brief Alias for the handle_t of a coroutine.
+ */
 using handle_t = std_coroutine::coroutine_handle<promise_t<R>>;
 
 /**
  * @brief Base class of dpp::coroutine<R>.
  *
- * @warn This class should not be used directly by a user, use dpp::coroutine<R> instead.
+ * @warning This class should not be used directly by a user, use dpp::coroutine<R> instead.
  * @note This class contains all the functions used internally by co_await. It is intentionally opaque and a private base of dpp::coroutine<R> so a user cannot call await_suspend and await_resume directly.
  */
 template <typename R>
@@ -178,7 +188,8 @@ public:
 
 } // namespace detail
 
-/** @class coroutine coroutine.h coro/coroutine.h
+/**
+ * @class coroutine coroutine.h coro/coroutine.h
  * @brief Base type for a coroutine, starts on co_await.
  *
  * @warning - This feature is EXPERIMENTAL. The API may change at any time and there may be bugs.
@@ -561,6 +572,9 @@ inline void coroutine<void>::await_resume_impl() const {
 	}
 }
 #endif /* _DOXYGEN_ */
+
+DPP_CHECK_ABI_COMPAT(coroutine<void>, coroutine_dummy)
+DPP_CHECK_ABI_COMPAT(coroutine<uint64_t>, coroutine_dummy)
 
 } // namespace dpp
 
