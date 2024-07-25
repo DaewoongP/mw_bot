@@ -114,6 +114,12 @@ def start(client, lostark, commands, discord):
                 elif item.get("Name") == "남겨진 바람의 절벽 6세트 (30각성합계)":
                     embed.add_field(name="카드", value=f"남바절 30", inline=True)
                     break
+                elif item.get("Name") == "창의 달인 6세트 (30각성합계)":
+                    embed.add_field(name="카드", value=f"창달 30", inline=True)
+                    break
+                else:
+                    embed.add_field(name="카드", value=f".", inline=True)
+                    break
 
         # 엘릭서
         # 레벨 제한 필요
