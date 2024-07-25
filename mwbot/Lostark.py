@@ -22,12 +22,13 @@ class CLostark:
     def __init__(self, token):
         # init
         self.headers = {
-        'accept': 'application/json',
-        'authorization': token
+        'accept' : 'application/json',
+        'authorization' : 'bearer ' + token
         }
         init_url = 'https://developer-lostark.game.onstove.com/example/api'
         init_response = requests.get(init_url, headers=self.headers)
-
+           
+        
         print(f"Lostark Init : {init_response}")
 
         ### 공지사항 초기화 ###
