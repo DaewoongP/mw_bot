@@ -6,6 +6,9 @@ def start(client, lostark, commands, discord):
     # 최신 공지 사항
     @client.hybrid_command(name="로아공지", with_app_command=True, description="로스트아크의 가장 최신 업데이트 내역을 보여줍니다.")
     async def command_notice(ctx: commands.Context):
+        if ctx.clean_prefix == "!":
+            await ctx.message.delete()
+            
         embed = discord.Embed(
             title="로아 최신 업데이트 내역",
             description=f"[{lostark.get_notice_title()[0]}]({lostark.get_notice_link()[0]})",
@@ -14,11 +17,13 @@ def start(client, lostark, commands, discord):
         # 보낸사람의 이름, 썸넬이 임베드에 보이게됨.
         embed.set_footer(text=ctx.author.display_name, icon_url=ctx.author.avatar.url)
         await ctx.send(embed=embed)
-        #await ctx.message.delete()
 
     # 간단한 군장 검사
     @client.hybrid_command(name="군장검사", with_app_command=True, description="캐릭터의 간단한 정보를 표시해줍니다.")
     async def command_check_spec(ctx: commands.Context, character_name):
+        if ctx.clean_prefix == "!":
+            await ctx.message.delete()
+            
         character_name = All.change_name(character_name)
 
         sibling_list = lostark.find_siblings(character_name=character_name)
@@ -116,9 +121,6 @@ def start(client, lostark, commands, discord):
                     break
                 elif item.get("Name") == "창의 달인 6세트 (30각성합계)":
                     embed.add_field(name="카드", value=f"창달 30", inline=True)
-                    break
-                else:
-                    embed.add_field(name="카드", value=f".", inline=True)
                     break
 
         # 엘릭서

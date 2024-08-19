@@ -5,6 +5,7 @@ import Web
 import Lostark
 import Lostark_Command
 import FiveSecond
+import Accessory
 from discord.ext import commands
 
 
@@ -25,6 +26,7 @@ class CMain:
         Lostark_Command.start(client=self._client, lostark=self._lostark, commands=commands, discord=discord)
         # Web.start(client=self._client, commands=commands)
         FiveSecond.start(client=self._client, commands=commands, discord=discord)
+        Accessory.start(client=self._client, commands=commands, discord=discord, channel_id=self.tokens.m_GongbangToken)
 
     def run(self):
         self._client.run(self.tokens.m_DiscordToken)

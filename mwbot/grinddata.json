@@ -1,0 +1,152 @@
+{
+    "users": [
+        {
+            "name": "muw00",
+            "id": 250862150816497674,
+            "necklace": [
+                {
+                    "option": "낙인력 %",
+                    "value": 2.15
+                },
+                {
+                    "option": "무기 공격력 +",
+                    "value": 195
+                },
+                {
+                    "option": "적에게 주는 피해 %",
+                    "value": 1.2
+                }
+            ],
+            "earring1": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "earring2": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "ring1": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "ring2": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "name": "_dww",
+            "id": 719025510205751398,
+            "necklace": [
+                {
+                    "option": "적에게 주는 피해 %",
+                    "value": 0.55
+                },
+                {
+                    "option": "무기 공격력 +",
+                    "value": 480
+                },
+                {
+                    "option": "전투 중 생명력 회복량 +",
+                    "value": 10
+                }
+            ],
+            "earring1": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "earring2": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "ring1": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ],
+            "ring2": [
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                },
+                {
+                    "option": "x",
+                    "value": 0
+                }
+            ]
+        }
+    ]
+}

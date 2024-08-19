@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Accessory.py" />
     <Compile Include="All.py" />
     <Compile Include="FiveSecond.py" />
     <Compile Include="Inits.py" />
@@ -33,6 +34,7 @@
     <Compile Include="Web.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="acc_grind.txt" />
     <Content Include="fiveseconds.txt" />
     <Content Include="Installed.txt" />
   </ItemGroup>
