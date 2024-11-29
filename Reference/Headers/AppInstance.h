@@ -15,6 +15,7 @@ public:
 
 private:
 	class CBot* m_pBot = nullptr;
+	class CCommandManager* m_pCommandManager = nullptr;
 
 public:
 	static void Shutdown();

@@ -4,6 +4,8 @@
 #define			ZEROMEM(_ptr)					ZeroMemory(_ptr, sizeof *_ptr)
 #define			ZEROMEMSIZE(_ptr, _size)		ZeroMemory(_ptr, sizeof _size)
 
+#define			MW_TEXT(_message)					u8##_message
+
 ///////////////////////// default Macros /////////////////////////////
 #ifndef			MSG_BOX
 #define			MSG_BOX(_message)			MessageBox(nullptr, TEXT(_message), L"System Message", MB_OK)

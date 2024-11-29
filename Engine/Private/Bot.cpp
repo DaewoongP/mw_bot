@@ -34,9 +34,10 @@ HRESULT CBot::Initialize(const string& strTokenPath)
 
 	m_pCluster->on_log(dpp::utility::cout_logger());
 
-	m_pCluster->on_slashcommand([](const dpp::slashcommand_t& slashEvent) {
+	m_pCluster->on_slashcommand([&](const dpp::slashcommand_t& slashEvent) {
 		if (slashEvent.command.get_command_name() == "ping") {
-			slashEvent.reply("Pong!");
+
+			slashEvent.reply(MW_TEXT("Å×¤Ñ½ºÆ® ±Â"));
 		}
 		});
 
@@ -55,7 +56,7 @@ HRESULT CBot::Apply()
 {
 	// st_wait -> normal mode
 	// st_return -> check once (debug)
-	m_pCluster->start(dpp::st_return);
+	m_pCluster->start(dpp::st_wait);
 
 	m_pCluster->shutdown();
 

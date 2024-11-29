@@ -16,7 +16,6 @@ HRESULT CCommandManager::RegisterCommand()
 {
     for (auto& pairCommand : m_Commands)
     {
-        pairCommand.second->
     }
 
     return S_OK;

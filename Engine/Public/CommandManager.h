@@ -18,7 +18,7 @@ public:
 	HRESULT RegisterCommand();
 
 private:
-	_umap<const string&, CCommand*> m_Commands;
+	_umap<string, CCommand*> m_Commands;
 
 public:
 	virtual void Free() override;
