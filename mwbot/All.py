@@ -27,6 +27,26 @@ def change_name(name):
         return "전창술사에용"
     return name
 
+def df_server_name(name):
+    if name == "카인":
+        return "cain"
+    if name == "디레지에":
+        return "diregie"
+    if name == "시로코":
+        return "siroco"
+    if name == "프레이":
+        return "prey"
+    if name == "카시야스":
+        return "casillas"
+    if name == "힐더":
+        return "hilder"
+    if name == "안톤":
+        return "anton"
+    if name == "바칼":
+        return "bakal"
+    
+    return ""
+
 # 엘릭서
 elixir_list = ["강맹", "달인", "선각자", "선봉대", "신념", "진군", "칼날 방패", "행운", "회심"]
 

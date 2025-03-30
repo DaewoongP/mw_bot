@@ -24,6 +24,8 @@
   <ItemGroup>
     <Compile Include="Accessory.py" />
     <Compile Include="All.py" />
+    <Compile Include="DF.py" />
+    <Compile Include="DF_Command.py" />
     <Compile Include="FiveSecond.py" />
     <Compile Include="Inits.py" />
     <Compile Include="Lostark.py" />
@@ -34,8 +36,7 @@
     <Compile Include="Web.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="acc_grind.txt" />
-    <Content Include="fiveseconds.txt" />
+    <Content Include="DFCharacters.txt" />
     <Content Include="Installed.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

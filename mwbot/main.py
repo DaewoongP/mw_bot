@@ -1,16 +1,14 @@
+import DF_Command
 import discord
 import MyToken
 import Inits
+import DF
 import Web
-import Lostark
-import Lostark_Command
-import FiveSecond
-import Accessory
 from discord.ext import commands
 
 
 class CMain:
-    def __init__(self):
+    def __init__(self): # init
         # token
         self.tokens = MyToken.CToken()
         # init
@@ -20,15 +18,14 @@ class CMain:
 
         Inits.init(client=self._client, commands=commands)
 
-        self._lostark = Lostark.CLostark(token=self.tokens.m_LostarkToken)
+        # DF
+        self._DF = DF.CDF(token=self.tokens.m_DFToken)
 
-    def start(self):
-        Lostark_Command.start(client=self._client, lostark=self._lostark, commands=commands, discord=discord)
-        # Web.start(client=self._client, commands=commands)
-        FiveSecond.start(client=self._client, commands=commands, discord=discord)
-        Accessory.start(client=self._client, commands=commands, discord=discord, channel_id=self.tokens.m_GongbangToken)
+    def start(self): # start components
+        Web.start(client=self._client, commands=commands)
+        DF_Command.start(client=self._client, DF=self._DF, commands=commands, discord=discord)
 
-    def run(self):
+    def run(self): # run
         self._client.run(self.tokens.m_DiscordToken)
 
 
