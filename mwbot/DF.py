@@ -42,6 +42,7 @@ class CDF:
     def get_characters(self):
         character_file_read = open("DFCharacters.txt", 'r', encoding='utf-8')
         filelines = character_file_read.readlines() # read line"s"
+        character_file_read.close()
 
         character_list = list()
         for line in filelines:
@@ -55,7 +56,7 @@ class CDF:
     def register_character(self, server_name, character_name, character_id):
         character_file_read = open("DFCharacters.txt", 'r', encoding='utf-8')
         filelines = character_file_read.readlines() # read line"s"
-
+        character_file_read.close()
         current_list = list()
         isAlreadyRegisterData = False
         # 한줄씩 라인을 읽어서 (서버 아이디, 캐릭터 아이디, 캐릭터 이름) 을 저장함.
@@ -69,4 +70,5 @@ class CDF:
         else:
             character_file_write = open("DFCharacters.txt", 'a', encoding='utf-8') # append mode로 열어야 마지막에 써짐.
             character_file_write.write(server_name + ' ' + character_id + ' ' + character_name + '\n')
+            character_file_write.close()
             return True

@@ -8,3 +8,4 @@ class CToken:
         self.m_DFToken      = self.m_DFToken.replace('\n', '')
         self.m_ServerToken  = token_file.readline() # 서버 토큰 데이터
         self.m_ServerToken  = self.m_DFToken.replace('\n', '')
+        token_file.close()
