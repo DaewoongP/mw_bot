@@ -21,20 +21,27 @@ class CDF:
         print(f"DF Servers : {init_response}")
 
     def get_character_id(self, str_in, want_data):
-        data_url = self.url + str_in + "&" + self.apikey;
+        data_url = self.url + str_in + "&" + self.apikey
         # url에서 header를 처리해서 가져와라. json 형식.
         data_out = requests.get(data_url, headers=self.headers)
 
         return data_out.json()['rows'][0][want_data]
 
     def get_timeline(self, str_in):
-        data_url = self.url + str_in + "&" + self.apikey;
+        data_url = self.url + str_in + "&" + self.apikey
         # url에서 header를 처리해서 가져와라. json 형식.
         data_out = requests.get(data_url, headers=self.headers)
 
         # 먹은 아이템 데이터 목록
         timeline_data = data_out.json()['timeline']['rows'] # 인덱스형식, 'code', 'name', 'date', 'data'(먹은아이템)
 
+        return timeline_data
+
+    def get_timeline_json(self, str_in):
+        data_url = self.url + str_in + "&" + self.apikey
+        data_out = requests.get(data_url, headers=self.headers)
+
+        timeline_data = data_out.json()
         return timeline_data
 
     # server, character_id / pair 형태로 데이터 반환

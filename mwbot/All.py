@@ -11,6 +11,10 @@ colors = [0xFFEEEE, 0xFFF2EE, 0xFFF7EE, 0xFFFBEE, 0xFFFFEE, 0xFBFFEE, 0xF7FFEE, 
 # 이모지 리스트
 emoji = ['💡', '📖', '✏️', '🖼️', '⚔️', '🪙', '🍀', '🎉', '🎮', '💰', '📺']
 
+# 던전이름
+SIM_SUNG = "심연 : 종말의 숭배자"
+JONG_SUNG = "종말의 숭배자"
+
 # 닉네임
 def change_name(name):
     if name == "그꿈덧":
